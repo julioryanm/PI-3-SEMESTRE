@@ -4,7 +4,9 @@ from django.core.validators import MinValueValidator, MaxValueValidator, RegexVa
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 
-class usuario(models.Model):
+
+
+class Usuario(models.Model):
 
     id_usuario = models.IntegerField(
         max_length = 10,
@@ -54,6 +56,7 @@ class EmpresaParceira(models.Model):
             )
         ]
     )
+    
     telefone = models.CharField(
         max_length=15,
         verbose_name="Telefone",
