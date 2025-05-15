@@ -15,10 +15,15 @@ def cadastro(request):
     else:
         form = UserCreationForm()
         
-        
         return render(
         request,
         'cadastro.html',
         { 'cadastro': cadastro }
     )
 
+
+def login(request):
+    return render(request, 'login.html')
+
+def home (request):
+    return render(request, 'home.html')
