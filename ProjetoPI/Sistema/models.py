@@ -4,6 +4,36 @@ from django.core.validators import MinValueValidator, MaxValueValidator, RegexVa
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 
+class usuario(models.Model):
+
+    id_usuario = models.IntegerField(
+        max_length = 10,
+        verbose_name = "ID Usuario",
+    )
+    
+    nome = models.CharField(
+        max_length = 200,
+        verbose_name = "Nome de Usuario",
+        help_text = "Digite aqui o nome..."
+    )
+
+    email = models.EmailField(
+        verbose_name = "E-mail",
+        blank = True
+    )
+
+    senha = models.CharField(
+        max_length = 50,
+        verbose_name = "Senha",
+        help_text = "Digite aqui a senha..."
+    )
+
+    cargo = models.CharField(
+        max_length = 50,
+        verbose_name = "Cargo",
+        help_text = "Digite aqui o cargo..."
+    )
+
 class EmpresaParceira(models.Model):
     """Modelo para empresas parceiras com validações aprimoradas"""
     nome = models.CharField(
