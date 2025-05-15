@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
@@ -20,6 +19,18 @@ def cadastro(request):
         'cadastro.html',
         { 'cadastro': cadastro }
     )
+
+def cadastroRestaurante(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Restaurante cadastrado com sucesso!')
+            return redirect('login')  # Redireciona após sucesso
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'cadastroRestaurante.html', { 'form': form })
 
 
 def login(request):
