@@ -18,14 +18,21 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from Sistema.views import cadastro_colaborador,
-    cadastrar_usuario,)
 
+from Sistema.views import (
+  cadastro, 
+  cadastroRestaurante,
+  cadastro_colaborador,
+  cadastrar_usuario,)
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('cadastro/', cadastro, name='cadastro'),
+    path('cadastroRestaurante/', cadastroRestaurante, name='cadastroRestaurante'),
+    ##path('', include('home.urls'),
     path('cadastro/', cadastro_colaborador, name='cadastro'),
     path('cadastrar-usuario/', cadastrar_usuario, name='cadastrar_usuario'),
-    path('', include('home.urls'),
+    
+
 ]

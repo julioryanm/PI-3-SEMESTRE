@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, redirect
 from .forms import ColaboradorForm
 from django.contrib import messages
@@ -18,6 +17,18 @@ def cadastro_colaborador(request):
 
     return render(request, 'cadastro.html', {'form': form})
 
+
+def cadastroRestaurante(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Restaurante cadastrado com sucesso!')
+            return redirect('login')  # Redireciona após sucesso
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'cadastroRestaurante.html', { 'form': form
 def cadastrar_usuario(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -25,6 +36,7 @@ def cadastrar_usuario(request):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
         tipo = request.POST.get('tipo')
+
 
      
         if password != confirm_password:
