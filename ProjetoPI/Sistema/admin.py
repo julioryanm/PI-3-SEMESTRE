@@ -1,7 +1,11 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import (EmpresaParceira, Obra, Colaborador, 
+from .models import (usuario, EmpresaParceira, Obra, Colaborador, 
                     Restaurante, Refeicao, RelatorioMensal)
+
+class UsuarioAdmin(admin.ModelAdmin):
+    list_display = ('id_usuario', 'nome', 'email', 'senha', 'cargo')
+    search_fields = ('id_usuario', 'cargo')
 
 class EmpresaParceiraAdmin(admin.ModelAdmin):
     list_display = ('nome', 'cnpj', 'telefone', 'email', 'ativo')
@@ -161,3 +165,4 @@ admin.site.register(Colaborador, ColaboradorAdmin)
 admin.site.register(Restaurante, RestauranteAdmin)
 admin.site.register(Refeicao, RefeicaoAdmin)
 admin.site.register(RelatorioMensal, RelatorioMensalAdmin)
+admin.site.register(usuario, UsuarioAdmin)
