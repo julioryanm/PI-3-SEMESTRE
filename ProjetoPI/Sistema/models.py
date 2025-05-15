@@ -2,6 +2,7 @@ from django.db import models
 from datetime import date
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
 
 class EmpresaParceira(models.Model):
     """Modelo para empresas parceiras com validações aprimoradas"""
@@ -461,6 +462,22 @@ class RelatorioMensal(models.Model):
         return f"Relatório de {self.mes_referencia} - {self.colaborador}"
 
     def save(self, *args, **kwargs):
-        # Calcula o total de refeições automaticamente
         self.total_refeicoes = self.cafe_manha + self.almocos + self.jantares + self.lanches
         super().save(*args, **kwargs)
+        
+class Profile(models.Model):
+    TIPOS_USUARIO = [
+        ('admin', 'Administrador'),
+        ('encarregado', 'Encarregado de Obra'),
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=20, choices=TIPOS_USUARIO)
+    telefone = models.CharField(max_length=15, blank=True, null=True)
+    obra = models.ForeignKey(Obra, on_delete=models.SET_NULL, null=True, blank=True)
+    foto = models.ImageField(upload_to='fotos_perfil/', null=True, blank=True)
+    data_criacao = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username} ({self.get_tipo_display()})'
+ 
