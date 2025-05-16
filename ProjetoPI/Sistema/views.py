@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import CadastroUsuarioForm, CadastroRestauranteForm, ColaboradorForm
+from .forms import User, CadastroRestauranteForm, ColaboradorForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import Profile
