@@ -175,17 +175,18 @@ class Colaborador(models.Model):
         max_length=100,
         verbose_name="Nome Completo"
     )
+        
     cpf = models.CharField(
         max_length=14,
         unique=True,
         verbose_name="CPF",
-        validators=[
-            RegexValidator(
-                regex=r'^\d{3}\.\d{3}\.\d{3}-\d{2}$',
-                message="CPF deve estar no formato: 999.999.999-99"
-            )
-        ]
+        validators=[RegexValidator(
+            regex=r'^\d{3}\.\d{3}\.\d{3}-\d{2}$',
+            message="CPF deve estar no formato: 999.999.999-99"
+        )]
     )
+
+
     rg = models.CharField(
         max_length=20,
         verbose_name="RG",

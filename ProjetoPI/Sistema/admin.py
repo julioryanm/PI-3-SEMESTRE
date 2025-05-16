@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import (usuario, EmpresaParceira, Obra, Colaborador, 
+from .models import (Usuario, EmpresaParceira, Obra, Colaborador, 
                     Restaurante, Refeicao, RelatorioMensal)
 
 class UsuarioAdmin(admin.ModelAdmin):
@@ -165,4 +165,4 @@ admin.site.register(Colaborador, ColaboradorAdmin)
 admin.site.register(Restaurante, RestauranteAdmin)
 admin.site.register(Refeicao, RefeicaoAdmin)
 admin.site.register(RelatorioMensal, RelatorioMensalAdmin)
-admin.site.register(usuario, UsuarioAdmin)
+admin.site.register(Usuario, UsuarioAdmin)

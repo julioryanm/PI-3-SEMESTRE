@@ -1,8 +1,16 @@
 from django.shortcuts import render, redirect
-from .forms import ColaboradorForm, CadastroUsuarioForm, CadastroRestauranteForm
+from .forms import CadastroUsuarioForm, CadastroRestauranteForm, ColaboradorForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import Profile
+
+def home(request):
+    return render (request, 'home.html')
+
+
+def login(request):
+    return render(request, 'login.html')
+
 
 def cadastro_colaborador(request):
     if request.method == 'POST':
@@ -37,13 +45,8 @@ def cadastrar_usuario(request):
             form.save()
             messages.success(request, 'Cadastro realizado com sucesso!')
             return redirect ('login')
-        else:
-            form = CadastroUsuarioForm()
-        return render (request,  'cadastrar_usuario.html', {'form': form})
+    else:
+        form = CadastroUsuarioForm()
+    return render (request, 'cadastrar_usuario.html', {'form': form})
 
 
-def login(request):
-    return render(request, 'login.html')
-
-def home (request):
-    return render(request, 'home.html')
