@@ -39,14 +39,47 @@ def cadastroRestaurante(request):
                   
 def cadastrar_usuario(request):
     if request.method == 'POST':
-       
-        form = CadastroUsuarioForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Cadastro realizado com sucesso!')
-            return redirect ('login')
-    else:
-        form = CadastroUsuarioForm()
-    return render (request, 'cadastrar_usuario.html', {'form': form})
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        tipo = request.POST.get('tipo')
+
+
+        if password != confirm_password:
+            messages.error(request, 'As senhas não coincidem!')
+            return redirect('cadastrar_usuario')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Nome de usuário já existe!')
+            return redirect('cadastrar_usuario')
+
+        if email and User.objects.filter(email=email).exists():
+            messages.error(request, 'E-mail já cadastrado!')
+            return redirect('cadastrar_usuario')
+
+
+        try:
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password
+            )
+
+
+            Profile.objects.create(
+                user=user,
+                tipo=tipo
+            )
+
+            messages.success(request, 'Usuário cadastrado com sucesso!')
+            return redirect('cadastrar_usuario') 
+
+        except Exception as e:
+            messages.error(request, f'Erro ao cadastrar usuário: {str(e)}')
+            return redirect('cadastrar_usuario')
+
+
+    return render(request, 'cadastrar_usuario.html')
 
 
