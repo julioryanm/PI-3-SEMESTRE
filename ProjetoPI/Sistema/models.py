@@ -262,6 +262,13 @@ class Colaborador(models.Model):
         verbose_name="Obra Vinculada",
         related_name='colaboradores'
     )
+
+    desconto = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name = "Desconto Vinculado"
+    )
+    
     ativo = models.BooleanField(
         default=True,
         verbose_name="Ativo"
