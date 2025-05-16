@@ -6,35 +6,21 @@ from django.contrib.auth.models import User
 
 
 
-class Usuario(models.Model):
+class Profile(models.Model):
+    TIPOS_USUARIO = [
+        ('admin', 'Administrador'),
+        ('encarregado', 'Encarregado de Obra'),
+    ]
 
-    id_usuario = models.IntegerField(
-        max_length = 10,
-        verbose_name = "ID Usuario",
-    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=20, choices=TIPOS_USUARIO)
+   
+
     
-    nome = models.CharField(
-        max_length = 200,
-        verbose_name = "Nome de Usuario",
-        help_text = "Digite aqui o nome..."
-    )
 
-    email = models.EmailField(
-        verbose_name = "E-mail",
-        blank = True
-    )
+    def __str__(self):
+        return f'{self.user.username} ({self.get_tipo_display()})'
 
-    senha = models.CharField(
-        max_length = 50,
-        verbose_name = "Senha",
-        help_text = "Digite aqui a senha..."
-    )
-
-    cargo = models.CharField(
-        max_length = 50,
-        verbose_name = "Cargo",
-        help_text = "Digite aqui o cargo..."
-    )
 
 class EmpresaParceira(models.Model):
     """Modelo para empresas parceiras com validações aprimoradas"""
