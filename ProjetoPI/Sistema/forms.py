@@ -1,7 +1,7 @@
 from django import forms 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import User
-from .models import Restaurante, Colaborador
+from .models import Restaurante, Colaborador, Profile
 
 # Cadatro restaurantes 
 # class CadastroRestauranteForm(Restaurante):
