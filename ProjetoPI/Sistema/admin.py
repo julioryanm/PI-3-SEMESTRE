@@ -83,7 +83,7 @@ class ColaboradorAdmin(admin.ModelAdmin):
         ('Dados Profissionais', {
             'fields': (
                 'funcao', 'salario', 'data_admissao', 
-                'data_demissao', 'obra', 'ativo'
+                'data_demissao', 'obra', 'desconto', 'ativo'
             )
         }),
         ('Observações', {
