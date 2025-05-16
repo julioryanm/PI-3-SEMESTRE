@@ -167,4 +167,4 @@ admin.site.register(Colaborador, ColaboradorAdmin)
 admin.site.register(Restaurante, RestauranteAdmin)
 admin.site.register(Refeicao, RefeicaoAdmin)
 admin.site.register(RelatorioMensal, RelatorioMensalAdmin)
-admin.site.register(Usuario, UsuarioAdmin)
+
