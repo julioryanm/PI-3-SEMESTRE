@@ -57,5 +57,5 @@ class ColaboradorForm(forms.ModelForm):
             'nome', 'cpf', 'rg', 'data_nascimento', 'sexo', 'estado_civil', 'telefone',
             'telefone_emergencia', 'cep', 'logradouro', 'numero', 'complemento', 'bairro',
             'cidade', 'estado', 'funcao', 'salario', 'data_admissao', 'data_demissao',
-            'obra', 'ativo', 'foto', 'observacoes'
+            'obra', 'desconto', 'ativo', 'foto', 'observacoes'
         ]
