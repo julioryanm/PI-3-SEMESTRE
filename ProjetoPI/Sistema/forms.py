@@ -9,7 +9,7 @@ from .models import Restaurante, Colaborador, Profile
 class CadastroRestauranteForm(forms.ModelForm):
     class Meta:
         model = Restaurante
-        fields = ['nome', 'cnpj', 'endereco', 'telefone', 'responsavel', 'capacidade', 'avaliacao', 'ativo']
+        fields = ['nome', 'cnpj', 'endereco', 'telefone', 'responsavel']
 
 
 # Cadatro usuarios 
@@ -54,8 +54,6 @@ class ColaboradorForm(forms.ModelForm):
     class Meta: 
         model = Colaborador
         fields = [
-            'nome', 'cpf', 'rg', 'data_nascimento', 'sexo', 'estado_civil', 'telefone',
-            'telefone_emergencia', 'cep', 'logradouro', 'numero', 'complemento', 'bairro',
-            'cidade', 'estado', 'funcao', 'salario', 'data_admissao', 'data_demissao',
+            'nome', 'cpf', 'data_nascimento', 'telefone', 'cidade',
             'obra', 'ativo', 'foto', 'observacoes'
         ]
