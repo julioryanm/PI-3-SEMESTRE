@@ -54,46 +54,39 @@ class ObraAdmin(admin.ModelAdmin):
     dias_atraso_display.short_description = 'Dias de Atraso'
 
 class ColaboradorAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'funcao', 'obra', 'data_admissao', 
-                   'tempo_servico_display', 'ativo', 'foto_display')
-    list_filter = ('ativo', 'funcao', 'sexo', 'obra')
-    search_fields = ('nome', 'cpf', 'funcao')
-    date_hierarchy = 'data_admissao'
-    raw_id_fields = ('obra',)
+    list_display = ('nome', 'obra', 'ativo', 'foto_display')
+    list_filter = ('ativo', 'obra')
+    search_fields = ('nome', 'cpf')
+    raw_id_fields = ('obra',)  # <- Corrigido aqui também
     list_per_page = 50
     ordering = ('nome',)
     readonly_fields = ('foto_display',)
-    
+
     fieldsets = (
         ('Dados Pessoais', {
             'fields': (
-                'foto', 'foto_display', 'nome', 'cpf', 'rg',
-                'data_nascimento', 'sexo', 'estado_civil'
+                'foto', 'foto_display', 'nome', 'cpf',
+                'data_nascimento'
             )
         }),
         ('Contato', {
-            'fields': ('telefone', 'telefone_emergencia', 'email')
+            'fields': ['telefone']
         }),
         ('Endereço', {
-            'fields': (
-                'cep', 'logradouro', 'numero', 'complemento',
-                'bairro', 'cidade', 'estado'
-            )
+            'fields': ('cidade',)  # <- Corrigido aqui
         }),
         ('Dados Profissionais', {
             'fields': (
-                'funcao', 'salario', 'data_admissao', 
-                'data_demissao', 'obra', 'desconto', 'ativo'
+                'obra', 'desconto', 'ativo'
             )
         }),
         ('Observações', {
-            'fields': ('observacoes',)
+            'fields': ('observacoes',)  # <- Corrigido aqui
         }),
     )
+
     
-    def tempo_servico_display(self, obj):
-        return f"{obj.tempo_servico} dias"
-    tempo_servico_display.short_description = 'Tempo de Serviço'
+    
     
     def foto_display(self, obj):
         if obj.foto:
@@ -101,23 +94,22 @@ class ColaboradorAdmin(admin.ModelAdmin):
         return "-"
     foto_display.short_description = 'Foto Atual'
 
+    
+
 class RestauranteAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'responsavel', 'telefone', 
-                   'avaliacao', 'capacidade', 'ativo')
-    list_filter = ('ativo', 'avaliacao')
-    search_fields = ('nome', 'cnpj', 'responsavel')
-    list_editable = ('avaliacao',)
+    list_display = ('nome', 'responsavel', 'telefone',)
+    search_fields = ('nome', 'cnpj', 'responsavel',)
     list_per_page = 20
     
     fieldsets = (
         ('Identificação', {
-            'fields': ('nome', 'cnpj', 'ativo')
+            'fields': ('nome', 'cnpj',)
         }),
         ('Informações', {
-            'fields': ('responsavel', 'capacidade', 'avaliacao')
+            'fields': ('responsavel',)
         }),
         ('Contato', {
-            'fields': ('telefone', 'endereco')
+            'fields': ('telefone', 'endereco',)
         }),
     )
 
@@ -129,6 +121,8 @@ class RefeicaoAdmin(admin.ModelAdmin):
     date_hierarchy = 'data'
     raw_id_fields = ('colaborador', 'restaurante')
     list_per_page = 50
+
+    
     
     def satisfacao_display(self, obj):
         if obj.satisfacao:
