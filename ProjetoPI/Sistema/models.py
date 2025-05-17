@@ -141,20 +141,6 @@ class Obra(models.Model):
 
 class Colaborador(models.Model):
     """Modelo completo para colaboradores da construção"""
-    SEXO_CHOICES = [
-        ('M', 'Masculino'),
-        ('F', 'Feminino'),
-        ('O', 'Outro'),
-        ('N', 'Prefiro não informar'),
-    ]
-
-    ESTADO_CIVIL_CHOICES = [
-        ('SOLTEIRO', 'Solteiro(a)'),
-        ('CASADO', 'Casado(a)'),
-        ('DIVORCIADO', 'Divorciado(a)'),
-        ('VIUVO', 'Viúvo(a)'),
-        ('SEPARADO', 'Separado(a)'),
-    ]
 
     # Dados Pessoais
     nome = models.CharField(
@@ -173,89 +159,29 @@ class Colaborador(models.Model):
     )
 
 
-    rg = models.CharField(
-        max_length=20,
-        verbose_name="RG",
-        blank=True
-    )
+    
     data_nascimento = models.DateField(
         verbose_name="Data de Nascimento"
     )
-    sexo = models.CharField(
-        max_length=1,
-        choices=SEXO_CHOICES,
-        verbose_name="Sexo"
-    )
-    estado_civil = models.CharField(
-        max_length=10,
-        choices=ESTADO_CIVIL_CHOICES,
-        verbose_name="Estado Civil",
-        blank=True
-    )
+    
+    
     telefone = models.CharField(
         max_length=15,
         verbose_name="Telefone"
     )
-    telefone_emergencia = models.CharField(
-        max_length=15,
-        verbose_name="Telefone de Emergência",
-        blank=True
-    )
-    email = models.EmailField(
-        verbose_name="E-mail",
-        blank=True
-    )
+    
+    
     
     # Endereço
-    cep = models.CharField(
-        max_length=9,
-        verbose_name="CEP"
-    )
-    logradouro = models.CharField(
-        max_length=100,
-        verbose_name="Logradouro"
-    )
-    numero = models.CharField(
-        max_length=10,
-        verbose_name="Número"
-    )
-    complemento = models.CharField(
-        max_length=50,
-        blank=True,
-        verbose_name="Complemento"
-    )
-    bairro = models.CharField(
-        max_length=50,
-        verbose_name="Bairro"
-    )
+    
     cidade = models.CharField(
         max_length=50,
         verbose_name="Cidade"
     )
-    estado = models.CharField(
-        max_length=2,
-        verbose_name="Estado"
-    )
+    
 
     # Dados Profissionais
-    funcao = models.CharField(
-        max_length=100,
-        verbose_name="Função/Cargo"
-    )
-    salario = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        verbose_name="Salário"
-    )
-    data_admissao = models.DateField(
-        verbose_name="Data de Admissão",
-        default=date.today
-    )
-    data_demissao = models.DateField(
-        verbose_name="Data de Demissão",
-        blank=True,
-        null=True
-    )
+    
     obra = models.ForeignKey(
         Obra,
         on_delete=models.CASCADE,
@@ -291,7 +217,6 @@ class Colaborador(models.Model):
         indexes = [
             models.Index(fields=['nome']),
             models.Index(fields=['cpf']),
-            models.Index(fields=['funcao']),
             models.Index(fields=['ativo']),
         ]
         permissions = [
@@ -299,13 +224,8 @@ class Colaborador(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.nome} ({self.funcao})"
+        return f"{self.nome}"
 
-    @property
-    def tempo_servico(self):
-        if self.data_demissao:
-            return (self.data_demissao - self.data_admissao).days
-        return (date.today() - self.data_admissao).days
 
 class Restaurante(models.Model):
     """Modelo para restaurantes parceiros com avaliação"""
@@ -329,42 +249,10 @@ class Restaurante(models.Model):
         max_length=100,
         verbose_name="Responsável"
     )
-    capacidade = models.IntegerField(
-        verbose_name="Capacidade de Atendimento"
-    )
-    avaliacao = models.DecimalField(
-        max_digits=2,
-        decimal_places=1,
-        verbose_name="Avaliação",
-        default=3.0,
-        validators=[
-            MinValueValidator(0),
-            MaxValueValidator(5)
-        ]
-    )
-    ativo = models.BooleanField(
-        default=True,
-        verbose_name="Ativo"
-    )
-    data_cadastro = models.DateField(
-        auto_now_add=True,
-        verbose_name="Data de Cadastro"
-    )
+    
 
-    class Meta:
-        verbose_name = "Restaurante"
-        verbose_name_plural = "Restaurantes"
-        ordering = ['nome']
-        constraints = [
-            models.CheckConstraint(
-                check=models.Q(avaliacao__gte=0) & models.Q(avaliacao__lte=5),
-                name="avaliacao_entre_0_e_5"
-            )
-        ]
 
-    def __str__(self):
-        return self.nome
-
+ 
 class Refeicao(models.Model):
     """Modelo para registro de refeições com validações"""
     TIPO_REFEICAO_CHOICES = [
