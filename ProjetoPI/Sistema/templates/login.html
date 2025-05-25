@@ -28,17 +28,33 @@
                         {% endfor %}
                     {% endif %}
 
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
                     <form method="POST">
                         {% csrf_token %}
 
                         <div class="mb-3">
-                            <label for="username" class="form-label">Usuário:</label>
-                            <input type="text" id="username" name="username" class="form-control" required>
+                            {{ form.email.label_tag }}
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger">
+                                    {{ form.email.errors }}
+                                </div>
+                            {% endif %}
                         </div>
 
                         <div class="mb-3">
-                            <label for="password" class="form-label">Senha:</label>
-                            <input type="password" id="password" name="password" class="form-control" required>
+                            {{ form.password.label_tag }}
+                            {{ form.password }}
+                            {% if form.password.errors %}
+                                <div class="text-danger">
+                                    {{ form.password.errors }}
+                                </div>
+                            {% endif %}
                         </div>
 
                         <div class="d-grid gap-2">

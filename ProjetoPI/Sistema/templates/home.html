@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -54,30 +56,37 @@ margin: 0;
 
 </style>
 
+<!-- Sidebar correta -->
 <div class="sidebar">
+  <img src="{% static 'images/blue version/user.png' %}" alt="error" height="80px" width="80px" style="display: block; margin:auto; margin-bottom: 50px; margin-top: 90px;">
 
-  <img src="images/blue version/user.png" alt="error" height="80px" width="80px" style=" display: block; margin:auto; margin-bottom: 50px; margin-top: 90px;" >
+  <form method="POST" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sair</button>
+  </form>
 
-<!--nome do usurario-->
+  <a href="{% url 'home' %}">
+    <img src="{% static 'images/blue version/home.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+    INICIO
+  </a>
 
-<a href="logout.html" class="sair">
-  <img src="images/logout.png" alt="error" height="17px" width="17px">
-  Sair</a>
+  <a href="{% url 'cadastroRestaurante' %}">
+    <img src="{% static 'images/blue version/brickwall.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+    CADASTRAR OBRA
+  </a>
 
-    <a href="home.html">
-      <img src="images/blue version/home.png" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-    INICIO</a>
-    <a href="adcObra.html">
-      <img src="images/blue version/brickwall.png" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      CADASTRAR OBRA</a>
-    <a href="adcFuncionario.html">
-      <img src="images/blue version/plus.png" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      CADASTRAR FUNCIONARIO</a>
-    <a href="relatorio.html">
-      <img src="images/blue version/to-do-list.png" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      RELATORIO</a>
+  <a href="{% url 'cadastro' %}">
+    <img src="{% static 'images/blue version/plus.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+    CADASTRAR FUNCIONARIO
+  </a>
 
+  <a href="{% url 'relatorio' %}">
+    <img src="{% static 'images/blue version/to-do-list.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+    RELATÓRIO
+  </a>
 </div>
+
+
 </head>
 
 <body>
