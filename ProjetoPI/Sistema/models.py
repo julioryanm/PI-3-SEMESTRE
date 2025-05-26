@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import date
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
@@ -15,12 +17,13 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     tipo = models.CharField(max_length=20, choices=TIPOS_USUARIO)
    
-
-    
-
     def __str__(self):
         return f'{self.user.username} ({self.get_tipo_display()})'
 
+@receiver(post_save, sender=User)
+def criar_profile_automanticamente(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
 
 class EmpresaParceira(models.Model):
     """Modelo para empresas parceiras com validações aprimoradas"""

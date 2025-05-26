@@ -1,29 +1,32 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
 
 <style>
-
-body{
-background-color: rgb(255, 255, 255);
-font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-margin: 0;
+body {
+  background-color: rgb(255, 255, 255);
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  margin: 0;
 }
 
-.sidebar{
-    width: 250px;
-    height: 100vh;
-    background-color: rgb(255, 255, 255);
-    flex-direction: column;
-    position: fixed;
-    border-right: 1px solid;
-    border-color: rgb(199, 199, 199);
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: rgb(255, 255, 255);
+  flex-direction: column;
+  position: fixed;
+  border-right: 1px solid;
+  border-color: rgb(199, 199, 199);
 }
-.sidebar a:not(.sair){
+
+.sidebar a:not(.sair) {
   font-size: 18px;
   color: #004aad;
-  display:inline-flex; align-items: center;
+  display: inline-flex;
+  align-items: center;
   height: 60px;
   width: 250px;
   position: static;
@@ -32,55 +35,76 @@ margin: 0;
   text-decoration: none;
   border-color: #444444;
 }
-.sidebar a:hover:not(.sair){
+
+.sidebar a:hover:not(.sair) {
   background-color: rgba(0, 0, 0, 0.067);
 }
-.sidebar a.active:not(.sair){
-    background-color: rgba(0, 0, 0, 0.067);
+
+.sidebar a.active:not(.sair) {
+  background-color: rgba(0, 0, 0, 0.067);
 }
 
-.sair{
+.sair-btn {
   font-size: 18px;
   color: #e70b34;
-  position: static;
-  text-align: center;
-  display: block; margin:auto;
-  margin-bottom: 50px;
+  background: none;
+  border: none;
+  padding: 0;
   text-decoration: none;
+  cursor: pointer;
 }
-.sair:hover{
+
+.sair-btn:hover {
   text-decoration: underline;
 }
 
+.logout-container {
+  text-align: center;
+  margin-bottom: 50px;
+}
 </style>
-
-<div class="sidebar">
-
-  <img src="images/blue version/user.png" alt="error" height="80px" width="80px" style=" display: block; margin:auto; margin-bottom: 50px; margin-top: 90px;" >
-
-<!--nome do usurario-->
-
-<a href="logout.html" class="sair">
-  <img src="images/logout.png" alt="error" height="17px" width="17px">
-  Sair</a>
-
-    <a href="home.html">
-      <img src="images/blue version/home.png" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-    INICIO</a>
-    <a href="adcObra.html">
-      <img src="images/blue version/brickwall.png" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      CADASTRAR OBRA</a>
-    <a href="adcFuncionario.html">
-      <img src="images/blue version/plus.png" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      CADASTRAR FUNCIONARIO</a>
-    <a href="relatorio.html" class="active">
-      <img src="images/blue version/to-do-list.png" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      RELATORIO</a>
-
-</div>
 </head>
 
 <body>
-  <img src="images/pain.png" alt="erro" style="position: fixed; bottom: 0; right: 0; width: 100px; height: 30px; margin-right: 5px;">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Ícone do usuário -->
+    <img src="{% static 'imagens/blue_version/user.png' %}" alt="error" height="80px" width="80px" style="display: block; margin:auto; margin-bottom: 10px; margin-top: 90px;">
+
+    <!-- Botão de sair abaixo do ícone -->
+    <div class="logout-container">
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="sair-btn">Sair</button>
+      </form>
+    </div>
+
+    <!-- Links do menu -->
+    <a href="{% url 'home' %}">
+      <img src="{% static 'imagens/blue_version/home.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      INICIO
+    </a>
+
+    <a href="{% url 'cadastroRestaurante' %}">
+      <img src="{% static 'imagens/blue_version/brickwall.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      CADASTRAR OBRA
+    </a>
+
+    <a href="{% url 'cadastro' %}">
+      <img src="{% static 'imagens/blue_version/plus.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      CADASTRAR COLABORADOR
+    </a>
+
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'imagens/blue_version/to-do-list.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      RELATÓRIO
+    </a>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <img src="{% static 'imagens/pain.png' %}" alt="erro" style="position: fixed; bottom: 0; right: 0; width: 100px; height: 30px; margin-right: 5px;">
+  <h style="display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 100px; color: #004aad; margin-left: 250px;">
+    
+  </h>
 </body>
-  </html>
+</html>

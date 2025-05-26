@@ -21,7 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from Sistema.views import (
-    home, login, logout,
+    home, login,
     relatorio,
     cadastroRestaurante,
     cadastro_colaborador,
@@ -36,7 +36,7 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('cadastro/', cadastro_colaborador, name='cadastro'),
     path('cadastrar-usuario/', cadastrar_usuario, name='cadastrar_usuario'),
-    path('relatorio/', relatorio, name='relatorio')
+    path('relatorio/', views.relatorio, name='relatorio')
 
 
 ]
