@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .models import Profile
+from .models import Profile, Restaurante
 
 
 
@@ -109,10 +109,24 @@ def cadastrar_usuario(request):
 
     return render(request, 'cadastrar_usuario.html')
 
+@login_required
+def listar_colaboradores(request):
+    return render (request, 'lista-colaborador.html')
+
+
+
+@login_required
+def listar_restaurantes(request, ):
+    restaurante = Restaurante.objects.all()
+    context = {'restaurante': restaurante}
+    return render (request, 'lista-restaurantes.html', context)
+
+
+@login_required
+def listar_obras(request):
+    return render (request, 'lista-obra.html')
 
 
 @login_required
 def relatorio(request):
     return render (request, 'relatorio.html')
-
-

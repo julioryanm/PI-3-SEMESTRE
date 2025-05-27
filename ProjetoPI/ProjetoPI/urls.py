@@ -22,7 +22,6 @@ from django.conf.urls.static import static
 
 from Sistema.views import (
     home, login,
-    relatorio,
     cadastroRestaurante,
     cadastro_colaborador,
     cadastrar_usuario,)
@@ -36,7 +35,8 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('cadastro/', cadastro_colaborador, name='cadastro'),
     path('cadastrar-usuario/', cadastrar_usuario, name='cadastrar_usuario'),
-    path('relatorio/', views.relatorio, name='relatorio')
-
-
+    path('relatorio/', views.relatorio, name='relatorio'), 
+    path('listar-restaurantes/', views.listar_restaurantes, name='listar-restaurantes'),
+    path('listar-obras/', views.listar_obras, name='listar-obras'),
+    path('listar-colaboradores/', views.listar_colaboradores, name='listar-colaboradores')
 ]

@@ -85,14 +85,19 @@ body {
       INICIO
     </a>
 
-    <a href="{% url 'cadastroRestaurante' %}">
-      <img src="{% static 'imagens/blue_version/brickwall.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      CADASTRAR OBRA
+    <a href="{% url 'listar-restaurantes' %}">
+      <img src="{% static 'imagens/blue_version/plus.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      RESTAURANTES
     </a>
 
-    <a href="{% url 'cadastro' %}">
+    <a href="{% url 'listar-colaboradores' %}">
       <img src="{% static 'imagens/blue_version/plus.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      CADASTRAR COLABORADOR
+      COLABORADORES
+    </a>
+
+    <a href="{% url 'listar-obras' %}">
+      <img src="{% static 'imagens/blue_version/brickwall.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      OBRAS
     </a>
 
     <a href="{% url 'relatorio' %}">
@@ -103,8 +108,8 @@ body {
 
   <!-- Conteúdo principal -->
   <img src="{% static 'imagens/pain.png' %}" alt="erro" style="position: fixed; bottom: 0; right: 0; width: 100px; height: 30px; margin-right: 5px;">
-  <h style="display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 100px; color: #004aad; margin-left: 250px;">
-    
+  <h style="display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 100px; color: #ee1b2c; margin-left: 250px;">
+    EM ELEBORAÇÃO
   </h>
 </body>
 </html>
