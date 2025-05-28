@@ -24,17 +24,6 @@ def permissoes_grupo(sender, **kwargs):
     )
    
 
-class Profile(models.Model):
-    TIPOS_USUARIO = [
-        ('admin', 'Administrador'),
-        ('encarregado', 'Encarregado de Obra'),
-    ]
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    tipo = models.CharField(max_length=20, choices=TIPOS_USUARIO)
-   
-    def __str__(self):
-        return f'{self.user.username} ({self.get_tipo_display()})'
 
 @receiver(post_save, sender=User)
 def criar_profile_automanticamente(sender, instance, created, **kwargs):
