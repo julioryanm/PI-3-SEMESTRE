@@ -22,7 +22,7 @@ def permissoes_grupo(sender, **kwargs):
   permissoes_admin = Permission.objects.filter(
         codename__in=["add_user", "change_user", "delete_user"]
     )
-    grupo_admin.permissions.set(permissoes_admin)
+   
 
 class Profile(models.Model):
     TIPOS_USUARIO = [
