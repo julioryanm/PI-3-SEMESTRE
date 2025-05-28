@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from django.contrib.auth.decorators import user_passes_test
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.authtoken.models import Token
+import logging
 
 @api_view(['GET'])
 def minha_api(request):
@@ -82,8 +83,7 @@ def cadastroRestaurante(request):
         form = CadastroRestauranteForm()
 
     return render(request, 'cadastroRestaurante.html', { 'form': form})
-
-@login_required                  
+              
 logger = logging.getLogger(__name__)
 
 def cadastrar_usuario(request):
