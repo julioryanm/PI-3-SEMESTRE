@@ -5,20 +5,25 @@ from django.dispatch import receiver
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, Permission
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from rest_framework.authtoken.models import Token
+
+@receiver(post_save, sender=User)
+def criar_token_para_novo_usuario(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance) 
 
 
-
-class Profile(models.Model):
-    TIPOS_USUARIO = [
-        ('admin', 'Administrador'),
-        ('encarregado', 'Encarregado de Obra'),
-    ]
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    tipo = models.CharField(max_length=20, choices=TIPOS_USUARIO)
+@receiver(post_migrate)
+def permissoes_grupo(sender, **kwargs):
+  permissoes_admin = Permission.objects.filter(
+        codename__in=["add_user", "change_user", "delete_user"]
+    )
    
-    def __str__(self):
-        return f'{self.user.username} ({self.get_tipo_display()})'
+
 
 @receiver(post_save, sender=User)
 def criar_profile_automanticamente(sender, instance, created, **kwargs):
@@ -256,73 +261,33 @@ class Restaurante(models.Model):
 
 
  
-class Refeicao(models.Model):
-    """Modelo para registro de refeições com validações"""
-    TIPO_REFEICAO_CHOICES = [
-        ('CAFE', 'Café da Manhã'),
-        ('ALMOCO', 'Almoço'),
-        ('JANTA', 'Jantar'),
-        ('LANCHE', 'Lanche'),
-    ]
-
-    colaborador = models.ForeignKey(
-        Colaborador,
-        on_delete=models.CASCADE,
-        verbose_name="Colaborador",
-        related_name='refeicoes'
+class Hotel(models.Model):
+    
+    nome = models.CharField(
+        max_length=100,
+        verbose_name="Nome do Hotel"
     )
-    restaurante = models.ForeignKey(
-        Restaurante,
-        on_delete=models.CASCADE,
-        verbose_name="Restaurante",
-        related_name='refeicoes'
+    cnpj = models.CharField(
+        max_length=18,
+        unique=True,
+        verbose_name="CNPJ"
     )
-    data = models.DateField(
-        verbose_name="Data",
-        auto_now_add=True
+    cidade = models.CharField(
+        max_length=18,
+        unique=True,
+        verbose_name="Cidade"
     )
-    horario = models.TimeField(
-        verbose_name="Horário",
-        auto_now_add=True
+    endereco = models.TextField(
+        verbose_name="Endereço Completo"
     )
-    tipo = models.CharField(
-        max_length=6,
-        choices=TIPO_REFEICAO_CHOICES,
-        verbose_name="Tipo de Refeição"
+    telefone = models.CharField(
+        max_length=15,
+        verbose_name="Telefone"
     )
-    valor = models.DecimalField(
-        max_digits=6,
-        decimal_places=2,
-        verbose_name="Valor da Refeição"
+    responsavel = models.CharField(
+        max_length=100,
+        verbose_name="Responsável"
     )
-    satisfacao = models.PositiveSmallIntegerField(
-        verbose_name="Satisfação (1-5)",
-        blank=True,
-        null=True,
-        validators=[
-            MinValueValidator(1),
-            MaxValueValidator(5)
-        ]
-    )
-    observacoes = models.TextField(
-        verbose_name="Observações",
-        blank=True
-    )
-
-    class Meta:
-        verbose_name = "Refeição"
-        verbose_name_plural = "Refeições"
-        ordering = ['-data', '-horario']
-        unique_together = ['colaborador', 'data', 'tipo']
-        constraints = [
-            models.CheckConstraint(
-                check=models.Q(satisfacao__gte=1) & models.Q(satisfacao__lte=5),
-                name="satisfacao_entre_1_e_5"
-            )
-        ]
-
-    def __str__(self):
-        return f"{self.colaborador} - {self.get_tipo_display()} em {self.data}"
 
 class RelatorioMensal(models.Model):
     """Modelo para relatórios mensais de refeições com detalhamento"""
