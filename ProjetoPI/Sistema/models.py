@@ -5,20 +5,25 @@ from django.dispatch import receiver
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, Permission
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from rest_framework.authtoken.models import Token
+
+@receiver(post_save, sender=User)
+def criar_token_para_novo_usuario(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance) 
 
 
-
-class Profile(models.Model):
-    TIPOS_USUARIO = [
-        ('admin', 'Administrador'),
-        ('encarregado', 'Encarregado de Obra'),
-    ]
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    tipo = models.CharField(max_length=20, choices=TIPOS_USUARIO)
+@receiver(post_migrate)
+def permissoes_grupo(sender, **kwargs):
+  permissoes_admin = Permission.objects.filter(
+        codename__in=["add_user", "change_user", "delete_user"]
+    )
    
-    def __str__(self):
-        return f'{self.user.username} ({self.get_tipo_display()})'
+
 
 @receiver(post_save, sender=User)
 def criar_profile_automanticamente(sender, instance, created, **kwargs):

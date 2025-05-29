@@ -1,13 +1,16 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import (Profile, EmpresaParceira, Obra, Colaborador, 
-                    Restaurante, Refeicao, RelatorioMensal)
+from .models import (
+    Profile, EmpresaParceira, Obra, Colaborador, 
+    Restaurante, RelatorioMensal, Hotel
+)
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'tipo')
     list_filter = ('tipo', )
     search_fields = ('user__username', 'user__email')
+
 
 class EmpresaParceiraAdmin(admin.ModelAdmin):
     list_display = ('nome', 'cnpj', 'telefone', 'email', 'ativo')
@@ -24,16 +27,19 @@ class EmpresaParceiraAdmin(admin.ModelAdmin):
         }),
     )
 
+
 class ObraAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'empresa', 'status', 'data_inicio', 
-                   'data_prevista_termino', 'dias_atraso_display')
+    list_display = (
+        'nome', 'empresa', 'status', 'data_inicio', 
+        'data_prevista_termino', 'dias_atraso_display'
+    )
     list_filter = ('status', 'empresa', 'data_inicio')
     search_fields = ('nome', 'empresa__nome')
     date_hierarchy = 'data_inicio'
     raw_id_fields = ('empresa',)
     list_per_page = 30
     ordering = ('-data_inicio',)
-    
+
     fieldsets = (
         ('Identificação', {
             'fields': ('nome', 'empresa', 'status')
@@ -48,16 +54,17 @@ class ObraAdmin(admin.ModelAdmin):
             'fields': ('descricao',)
         }),
     )
-    
+
     def dias_atraso_display(self, obj):
         return obj.dias_atraso or '-'
     dias_atraso_display.short_description = 'Dias de Atraso'
+
 
 class ColaboradorAdmin(admin.ModelAdmin):
     list_display = ('nome', 'obra', 'ativo', 'foto_display')
     list_filter = ('ativo', 'obra')
     search_fields = ('nome', 'cpf')
-    raw_id_fields = ('obra',)  # <- Corrigido aqui também
+    raw_id_fields = ('obra',)
     list_per_page = 50
     ordering = ('nome',)
     readonly_fields = ('foto_display',)
@@ -73,7 +80,7 @@ class ColaboradorAdmin(admin.ModelAdmin):
             'fields': ['telefone']
         }),
         ('Endereço', {
-            'fields': ('cidade',)  # <- Corrigido aqui
+            'fields': ('cidade',)
         }),
         ('Dados Profissionais', {
             'fields': (
@@ -81,26 +88,22 @@ class ColaboradorAdmin(admin.ModelAdmin):
             )
         }),
         ('Observações', {
-            'fields': ('observacoes',)  # <- Corrigido aqui
+            'fields': ('observacoes',)
         }),
     )
 
-    
-    
-    
     def foto_display(self, obj):
         if obj.foto:
             return format_html('<img src="{}" width="50" height="50" />', obj.foto.url)
         return "-"
     foto_display.short_description = 'Foto Atual'
 
-    
 
 class RestauranteAdmin(admin.ModelAdmin):
     list_display = ('nome', 'responsavel', 'telefone',)
     search_fields = ('nome', 'cnpj', 'responsavel',)
     list_per_page = 20
-    
+
     fieldsets = (
         ('Identificação', {
             'fields': ('nome', 'cnpj',)
@@ -113,32 +116,36 @@ class RestauranteAdmin(admin.ModelAdmin):
         }),
     )
 
-class RefeicaoAdmin(admin.ModelAdmin):
-    list_display = ('colaborador', 'tipo', 'restaurante', 
-                   'data', 'horario', 'valor', 'satisfacao_display')
-    list_filter = ('tipo', 'restaurante', 'data')
-    search_fields = ('colaborador__nome', 'restaurante__nome')
-    date_hierarchy = 'data'
-    raw_id_fields = ('colaborador', 'restaurante')
-    list_per_page = 50
 
-    
-    
-    def satisfacao_display(self, obj):
-        if obj.satisfacao:
-            return f"{obj.satisfacao} ★"
-        return "-"
-    satisfacao_display.short_description = 'Satisfação'
+class HotelAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'responsavel', 'telefone',)
+    search_fields = ('nome', 'cnpj', 'responsavel',)
+    list_per_page = 20
+
+    fieldsets = (
+        ('Identificação', {
+            'fields': ('nome', 'cnpj',)
+        }),
+        ('Informações', {
+            'fields': ('responsavel',)
+        }),
+        ('Contato', {
+            'fields': ('telefone', 'cidade', 'endereco',)
+        }),
+    )
+
 
 class RelatorioMensalAdmin(admin.ModelAdmin):
-    list_display = ('colaborador', 'mes_referencia', 'total_refeicoes', 
-                   'valor_total', 'data_geracao')
+    list_display = (
+        'colaborador', 'mes_referencia', 'total_refeicoes', 
+        'valor_total', 'data_geracao'
+    )
     list_filter = ('mes_referencia',)
     search_fields = ('colaborador__nome',)
     date_hierarchy = 'data_geracao'
     raw_id_fields = ('colaborador',)
     readonly_fields = ('data_geracao',)
-    
+
     fieldsets = (
         ('Identificação', {
             'fields': ('colaborador', 'mes_referencia')
@@ -154,11 +161,11 @@ class RelatorioMensalAdmin(admin.ModelAdmin):
         }),
     )
 
-# Registro dos modelos
+
+# Registro dos modelos no admin
 admin.site.register(EmpresaParceira, EmpresaParceiraAdmin)
 admin.site.register(Obra, ObraAdmin)
 admin.site.register(Colaborador, ColaboradorAdmin)
 admin.site.register(Restaurante, RestauranteAdmin)
-admin.site.register(Refeicao, RefeicaoAdmin)
+admin.site.register(Hotel, HotelAdmin)
 admin.site.register(RelatorioMensal, RelatorioMensalAdmin)
-
