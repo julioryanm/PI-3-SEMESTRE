@@ -5,8 +5,9 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.forms import User
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Restaurante, Colaborador, Profile
+from .models import Restaurante, Colaborador, Profile, Hotel
 from django.core.exceptions import ValidationError
+
 
  
 # Cadatro restaurantes
@@ -17,6 +18,10 @@ class CadastroRestauranteForm(forms.ModelForm):
         model = Restaurante
         fields = ['nome', 'cnpj', 'endereco', 'telefone', 'responsavel']
  
+class CadastroHotelForm(forms.ModelForm):
+    class Meta:
+        model = Hotel
+        fields = ['nome', 'cnpj', 'cidade', 'endereco', 'telefone', 'responsavel']
  
 # Cadatro usuarios
 class CustomUserCreationForm(UserCreationForm):
