@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import get_object_or_404
-from .forms import CadastroRestauranteForm, ColaboradorForm, LoginForm, User
+from .forms import CadastroRestauranteForm, ColaboradorForm, LoginForm, User, CadastroHotelForm
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -86,6 +86,21 @@ def cadastroRestaurante(request):
               
 logger = logging.getLogger(__name__)
 
+
+@login_required
+def cadastroHotel(request):
+    if request.method == 'POST':
+        form = CadastroHotelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Hotel cadastrado com sucesso!')
+            return redirect('login')  
+    else:
+        form = CadastroHotelForm()
+
+    return render(request, 'cadastroHotel.html', { 'form': form})
+
+@login_required                  
 def cadastrar_usuario(request):
     if request.method == 'POST':
         username = request.POST.get('username')
