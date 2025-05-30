@@ -7,16 +7,40 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from .models import Restaurante, Colaborador, Profile, Hotel
 from django.core.exceptions import ValidationError
-
+from .api_utils.viacep import buscar_endereco_por_cep
 
  
 # Cadatro restaurantes
 # class CadastroRestauranteForm(Restaurante):
        
 class CadastroRestauranteForm(forms.ModelForm):
+    cep = forms.CharField(max_length=9, required=True)
+    numero = forms.CharField(max_length=10, required=True)
+    complemento = forms.CharField(max_length=50, required=False)
+
     class Meta:
         model = Restaurante
-        fields = ['nome', 'cnpj', 'endereco', 'telefone', 'responsavel']
+        fields = ['nome', 'cnpj', 'telefone', 'responsavel']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        cep = cleaned_data.get('cep')
+        numero = cleaned_data.get('numero')
+        complemento = cleaned_data.get('complemento')
+
+        endereco_api = buscar_endereco_por_cep(cep)
+        if not endereco_api:
+            raise forms.ValidationError("CEP inválido ou não encontrado.")
+
+        endereco_formatado = f"{endereco_api['logradouro']}, {numero}"
+        if complemento:
+            endereco_formatado += f" - {complemento}"
+        endereco_formatado += f", {endereco_api['bairro']}, {endereco_api['localidade']} - {endereco_api['uf']}, CEP {cep}"
+
+        # Guarde o endereço formatado em um atributo extra no form para usar depois
+        self.endereco_formatado = endereco_formatado
+
+        return cleaned_data
  
 
 # Cadastro Hotel 
