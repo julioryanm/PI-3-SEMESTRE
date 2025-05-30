@@ -16,6 +16,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.authtoken.models import Token
 import logging
 
+
 @api_view(['GET'])
 def minha_api(request):
     if request.user.groups.filter(name='Encarregado').exists():
@@ -76,13 +77,18 @@ def cadastroRestaurante(request):
     if request.method == 'POST':
         form = CadastroRestauranteForm(request.POST)
         if form.is_valid():
-            form.save()
+            restaurante = form.save(commit=False)
+            restaurante.endereco = form.endereco_formatado  # usa o endereço formatado do clean
+            restaurante.save()
+
             messages.success(request, 'Restaurante cadastrado com sucesso!')
-            return redirect('login')  
+            return redirect('login')
+        else:
+            messages.error(request, 'Por favor, corrija os erros no formulário.')
     else:
         form = CadastroRestauranteForm()
 
-    return render(request, 'cadastroRestaurante.html', { 'form': form})
+    return render(request, 'cadastroRestaurante.html', {'form': form})
               
 logger = logging.getLogger(__name__)
 
