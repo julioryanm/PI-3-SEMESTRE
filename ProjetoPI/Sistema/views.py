@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import get_object_or_404
-from .forms import CadastroRestauranteForm, ColaboradorForm, LoginForm, User, CadastroHotelForm
+from .forms import CadastroRestauranteForm, ColaboradorForm, LoginForm, User, CadastroHotelForm, Hotel
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -88,17 +88,44 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-def cadastroHotel(request):
+def cadastro_hotel(request):
     if request.method == 'POST':
         form = CadastroHotelForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Hotel cadastrado com sucesso!')
-            return redirect('login')  
+            return redirect('listar-hoteis')  
     else:
         form = CadastroHotelForm()
 
-    return render(request, 'cadastroHotel.html', { 'form': form})
+    return render(request, 'cadastrar-hotel.html', { 'form': form})
+
+
+@login_required
+def listar_hoteis(request):
+    hotel = Hotel.objects.all()
+    context = {'hotel': hotel}
+    return render (request, 'lista-hoteis.html', context)
+
+'''
+@login_required
+def editar_hotel(request, id):
+    hotel = get_object_or_404(Hotel, id=id)
+    if request.method == 'POST':
+        form = '''
+
+@login_required
+def deletar_hotel(request):
+    if request.mothod == 'POST':
+        id = request.POST.get('id')
+        if id:
+            try:
+                Hotel.obgects.get(pk=id).delete()
+            except Hotel.DoesNotExist:
+                pass
+        return render (request, 'lista-hoteis.html')
+
+
 
 @login_required                  
 def cadastrar_usuario(request):
@@ -170,7 +197,7 @@ def listar_restaurantes(request, ):
 
 @login_required
 def listar_obras(request):
-    return render (request, 'lista-obra.html')
+    return render (request, 'lista-obras.html')
 
 
 @login_required

@@ -18,11 +18,22 @@ class CadastroRestauranteForm(forms.ModelForm):
         model = Restaurante
         fields = ['nome', 'cnpj', 'endereco', 'telefone', 'responsavel']
  
+
+# Cadastro Hotel 
 class CadastroHotelForm(forms.ModelForm):
     class Meta:
         model = Hotel
         fields = ['nome', 'cnpj', 'cidade', 'endereco', 'telefone', 'responsavel']
- 
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control'}),
+            'cnpj': forms.TextInput(attrs={'class': 'form-control'}),
+            'cidade': forms.TextInput(attrs={'class': 'form-control'}),
+            'endereco': forms.TextInput(attrs={'class': 'form-control'}),
+            'telefone': forms.TextInput(attrs={'class': 'form-control'}),
+            'responsavel': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+
 # Cadatro usuarios
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(
