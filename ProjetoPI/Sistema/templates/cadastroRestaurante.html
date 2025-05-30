@@ -3,21 +3,80 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cadastro de Restaurante</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 </head>
 <body>
     <h1>Cadastro de Restaurante</h1>
 
     <form method="POST" action="{% url 'cadastroRestaurante' %}">
-    {% csrf_token %}
+        {% csrf_token %}
 
-    <!-- Exemplo rápido: tudo em blocos <p> -->
-    {{ form.as_p }}
+        <h4>
+            {{form.nome.label}}: {{form.nome}}
+        </h4>
+
+        <h4>
+            {{form.cnpj.label}}: {{form.cnpj}}
+        </h4>
+
+        <h4>
+            {{form.telefone.label}}: {{form.telefone}}
+        </h4>
+        
+        <h4>
+            {{form.responsavel.label}}: {{form.responsavel}}
+        </h4>
+
+        <p>
+            <label for="cep">CEP:</label>
+            <input type="text" id="cep" name="cep" maxlength="9" required />
+        </p>
+
+        
+        <!-- Campos visíveis preenchidos via JS -->
+        <p>
+            <label for="rua">Rua:</label>
+            <input type="text" id="rua" name="rua" readonly />
+        </p>
+
+        <p>
+            <label for="bairro">Bairro:</label>
+            <input type="text" id="bairro" name="bairro" readonly />
+        </p>
+
+        <p>
+            <label for="cidade">Cidade:</label>
+            <input type="text" id="cidade" name="cidade" readonly />
+        </p>
+
+        <p>
+            <label for="estado">Estado:</label>
+            <input type="text" id="estado" name="estado" readonly />
+        </p>
+
+        <p>
+            <label for="numero">Número:</label>
+            <input type="text" id="numero" name="numero" required />
+        </p>
+
+        <p>
+            <label for="complemento">Complemento:</label>
+            <input type="text" id="complemento" name="complemento" />
+        </p>
+
+        <!-- Campo oculto que envia o endereço completo para o backend -->
+        <input type="hidden" name="endereco" id="endereco" />
+        {% if form.endereco.errors %}
+            <p style="color: red;">{{ form.endereco.errors }}</p>
+        {% endif %}
 
         <button type="submit">Cadastrar Restaurante</button>
     </form>
+
+    <script src="{% static 'js/busca_cep.js' %}"></script>
+
 </body>
 </html>
