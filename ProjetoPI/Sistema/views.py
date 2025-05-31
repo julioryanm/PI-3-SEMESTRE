@@ -15,6 +15,8 @@ from django.contrib.auth.decorators import user_passes_test
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.authtoken.models import Token
 import logging
+from django.apps import apps
+from django.http import HttpResponseForbidden
 
 
 @api_view(['GET'])
@@ -113,23 +115,43 @@ def listar_hoteis(request):
     context = {'hotel': hotel}
     return render (request, 'lista-hoteis.html', context)
 
-'''
+
 @login_required
 def editar_hotel(request, id):
     hotel = get_object_or_404(Hotel, id=id)
     if request.method == 'POST':
-        form = '''
+        form = CadastroHotelForm(request.POST, instance=hotel)
+    if form.is_valid():
+            form.save()
+            return redirect('editar')
+    else:
+        form = CadastroHotelForm(instance=hotel)
+
+    return render(request, 'editar-hotel.html', {'form': form, 'contato': hotel})  
+
+
+
+# View para deletar qualquer modelo autorizado
+#Modelos permitidos 
+ALLOWED_MODELS = ['Hotel', 'Restaurante', 'Colaborador', 'Obra'] 
 
 @login_required
-def deletar_hotel(request):
-    if request.mothod == 'POST':
-        id = request.POST.get('id')
-        if id:
-            try:
-                Hotel.obgects.get(pk=id).delete()
-            except Hotel.DoesNotExist:
-                pass
-        return render (request, 'lista-hoteis.html')
+def deletar_generico(request):
+    if request.method == 'POST':
+        model_name = request.POST.get('model')
+        ids = request.POST.getlist('ids')
+
+        if model_name not in ALLOWED_MODELS:
+            return HttpResponseForbidden("Modelo não permitido.")
+
+        try:
+            Model = apps.get_model('Sistema', model_name)  
+            Model.objects.filter(id__in=ids).delete()
+        except Exception as e:
+            print(f"Erro ao deletar: {e}")  
+
+        return redirect('home')  
+    return redirect('home')
 
 
 

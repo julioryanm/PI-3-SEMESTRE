@@ -24,5 +24,7 @@ urlpatterns = [
     path('listar-obras/', views.listar_obras, name='listar-obras'),
     path('listar-colaboradores/', views.listar_colaboradores, name='listar-colaboradores'),
     path('listar-hoteis/', views.listar_hoteis, name='listar-hoteis'), 
-    path('cadastrar-hotel/', views.cadastro_hotel, name='cadastrar-hotel')
+    path('cadastrar-hotel/', views.cadastro_hotel, name='cadastrar-hotel'), 
+    path('deletar/', views.deletar_generico, name='deletar-generico'),
+    path('editar/<int:id>/', views.editar_hotel, name='editar-hotel'),
 ]
