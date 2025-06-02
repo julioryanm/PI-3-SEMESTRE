@@ -147,8 +147,8 @@ class ColaboradorForm(forms.ModelForm):
     class Meta:
         model = Colaborador
         fields = [
-            'nome', 'cpf', 'data_nascimento', 'telefone', 'cidade',
-            'obra', 'ativo', 'foto', 'observacoes'
+            'nome', 'cpf', 'data_nascimento', 'telefone', 'endereco',
+            'obra'
         ]
 
 class LoginForm(ModelForm):
