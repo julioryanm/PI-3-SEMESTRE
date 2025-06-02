@@ -182,9 +182,9 @@ class Colaborador(models.Model):
     
     # Endereço
     
-    cidade = models.CharField(
+    endereco = models.CharField(
         max_length=50,
-        verbose_name="Cidade"
+        verbose_name="Endereço"
     )
     
 
@@ -197,27 +197,6 @@ class Colaborador(models.Model):
         related_name='colaboradores'
     )
 
-    desconto = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        verbose_name = "Desconto Vinculado"
-    )
-    
-    ativo = models.BooleanField(
-        default=True,
-        verbose_name="Ativo"
-    )
-    foto = models.ImageField(
-        upload_to='colaboradores/',
-        verbose_name="Foto",
-        blank=True,
-        null=True
-    )
-    observacoes = models.TextField(
-        verbose_name="Observações",
-        blank=True
-    )
-
     class Meta:
         verbose_name = "Colaborador"
         verbose_name_plural = "Colaboradores"
@@ -225,7 +204,6 @@ class Colaborador(models.Model):
         indexes = [
             models.Index(fields=['nome']),
             models.Index(fields=['cpf']),
-            models.Index(fields=['ativo']),
         ]
         permissions = [
             ('view_colaborador_report', 'Pode visualizar relatórios de colaboradores'),
