@@ -61,18 +61,18 @@ class ObraAdmin(admin.ModelAdmin):
 
 
 class ColaboradorAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'obra', 'ativo', 'foto_display')
-    list_filter = ('ativo', 'obra')
+    list_display = ('nome', 'obra')
+    list_filter = ('obra',)
     search_fields = ('nome', 'cpf')
     raw_id_fields = ('obra',)
     list_per_page = 50
     ordering = ('nome',)
-    readonly_fields = ('foto_display',)
+    #readonly_fields = ('foto_display',)
 
     fieldsets = (
         ('Dados Pessoais', {
             'fields': (
-                'foto', 'foto_display', 'nome', 'cpf',
+                'nome', 'cpf',
                 'data_nascimento'
             )
         }),
@@ -80,15 +80,12 @@ class ColaboradorAdmin(admin.ModelAdmin):
             'fields': ['telefone']
         }),
         ('Endereço', {
-            'fields': ('cidade',)
+            'fields': ('endereco',)
         }),
         ('Dados Profissionais', {
             'fields': (
-                'obra', 'desconto', 'ativo'
+                'obra',
             )
-        }),
-        ('Observações', {
-            'fields': ('observacoes',)
         }),
     )
 
