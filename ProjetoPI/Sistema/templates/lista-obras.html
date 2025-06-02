@@ -1,11 +1,76 @@
 {% load static %}
 
-<a href="{% url 'home' %}">
-    <img src="{% static 'imagens/blue_version/home.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-    INICIO
-  </a>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
 
-<a href="{% url 'home' %}">
-    <img src="{% static 'imagens/blue_version/brickwall.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-    CADASTRAR OBRA
-  </a>
+<body>
+  <!-- Sidebar -->
+  
+<div class="sidebar">
+    <!-- Ícone do usuário -->
+     <div class="logout-container">
+    <img src="{% static 'images/white version/user.png' %}" alt="error" height="65px" width="65px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+
+    <!-- Botão de sair abaixo do ícone -->
+    
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="sair-btn">
+          <img src="{% static 'images/logout.png' %}" alt="error" height="15px" width="15px">
+          Sair
+        </button>
+      </form>
+    </div>
+
+    <!-- Links do menu -->
+
+    <label>Navegeção</label>
+    <hr>
+    <a href="{% url 'home' %}">
+      <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      INICIO
+    </a>
+
+    <a href="{% url 'listar-colaboradores' %}">
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      COLABORADORES
+    </a>
+
+    <a href="{% url 'listar-restaurantes' %}">
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      RESTAURANTES
+    </a>
+
+    <a href="{% url 'listar-obras' %}"class="active">
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      OBRAS
+    </a>
+
+    <a href="{% url 'listar-hoteis' %}">
+      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      HOTÉIS
+    </a>
+
+    <a href="{% url 'cadastrar_usuario' %}">
+      <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      USUÁRIOS
+    </a>
+
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      DASHBOARD
+    </a>
+  </div>
+
+<img src="{% static 'images/paintocode.png' %}" alt="erro" style="position: fixed; bottom: 0; right: 0; width: 130px; height: 37px; margin-right: 5px;">
+
+  <h style="display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 100px; color: #ee1b2c; margin-left: 250px;">
+    EM ELABORAÇÃO
+  </h>
+
+</body>
+</html>

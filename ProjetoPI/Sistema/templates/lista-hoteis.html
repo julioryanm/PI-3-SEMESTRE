@@ -5,147 +5,89 @@
 <head>
   <meta charset="UTF-8">
   <title>Lista Hotéis | PI-3-SEMESTRE</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
-  <style>
-    body {
-      background: #ffffff;
-      color: #333;
-      margin: 0;
-      padding: 0;
-      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    }
-
-    .sidebar {
-      width: 250px;
-      height: 100vh;
-      background-color: #ffffff;
-      flex-direction: column;
-      position: fixed;
-      border-right: 1px solid rgb(199, 199, 199);
-    }
-
-    .sidebar a:not(.sair) {
-      font-size: 18px;
-      color: #004aad;
-      display: inline-flex;
-      align-items: center;
-      height: 60px;
-      width: 250px;
-      text-align: left;
-      text-decoration: none;
-      transition: background-color 0.7s ease;
-    }
-
-    .sidebar a:hover:not(.sair),
-    .sidebar a.active:not(.sair) {
-      background-color: rgba(0, 0, 0, 0.067);
-    }
-
-    .sair-btn {
-      font-size: 18px;
-      color: #e70b34;
-      background: none;
-      border: none;
-      padding: 0;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .sair-btn:hover {
-      text-decoration: underline;
-    }
-
-    .logout-container {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-
-    .container-main {
-      margin-left: 270px;
-      padding: 2rem;
-    }
-
-    .card {
-      border: none;
-      border-radius: 1rem;
-      box-shadow: 0 0.5rem 1rem rgba(86, 223, 233, 0.3);
-      background-color: #fef4e5;
-      color: #333;
-      padding: 2rem;
-      width: 100%;
-      max-width: 1000px;
-      overflow-x: auto;
-    }
-
-    .table thead {
-      background-color: #fcfcfc;
-      color: white;
-    }
-
-    th, td {
-      white-space: nowrap;
-    }
-  </style>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
 
 <!-- Sidebar -->
-<div class="sidebar">
-  <img src="{% static 'imagens/blue_version/user.png' %}" alt="user" height="80px" width="80px"
-       style="display: block; margin:auto; margin-bottom: 10px; margin-top: 90px;">
 
-  <div class="logout-container">
-    <form method="POST" action="{% url 'logout' %}">
-      {% csrf_token %}
-      <button type="submit" class="sair-btn">Sair</button>
-    </form>
+<div class="sidebar">
+    <!-- Ícone do usuário -->
+     <div class="logout-container">
+    <img src="{% static 'images/white version/user.png' %}" alt="error" height="65px" width="65px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+
+    <!-- Botão de sair abaixo do ícone -->
+    
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="sair-btn">
+          <img src="{% static 'images/logout.png' %}" alt="error" height="15px" width="15px">
+          Sair
+        </button>
+      </form>
+    </div>
+
+    <!-- Links do menu -->
+
+    <label>Navegeção</label>
+    <hr>
+    <a href="{% url 'home' %}">
+      <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      INICIO
+    </a>
+
+    <a href="{% url 'listar-colaboradores' %}">
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      COLABORADORES
+    </a>
+
+    <a href="{% url 'listar-restaurantes' %}">
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      RESTAURANTES
+    </a>
+
+    <a href="{% url 'listar-obras' %}">
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      OBRAS
+    </a>
+
+    <a href="{% url 'listar-hoteis' %}"class="active">
+      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      HOTÉIS
+    </a>
+
+    <a href="{% url 'cadastrar_usuario' %}">
+      <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      USUÁRIOS
+    </a>
+
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      DASHBOARD
+    </a>
   </div>
 
-  <a href="{% url 'home' %}">
-    <img src="{% static 'imagens/blue_version/home.png' %}" alt="home" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-    INICIO
-  </a>
-
-  <a href="{% url 'listar-restaurantes' %}">
-    <img src="{% static 'imagens/blue_version/plus.png' %}" alt="restaurantes" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-    RESTAURANTES
-  </a>
-
-  <a href="{% url 'listar-hoteis' %}">
-    <img src="{% static 'imagens/blue_version/plus.png' %}" alt="hotéis" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-    HOTÉIS
-  </a>
-
-  <a href="{% url 'listar-colaboradores' %}">
-    <img src="{% static 'imagens/blue_version/plus.png' %}" alt="colaboradores" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-    COLABORADORES
-  </a>
-
-  <a href="{% url 'listar-obras' %}">
-    <img src="{% static 'imagens/blue_version/brickwall.png' %}" alt="obras" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-    OBRAS
-  </a>
-
-  <a href="{% url 'relatorio' %}">
-    <img src="{% static 'imagens/blue_version/to-do-list.png' %}" alt="relatório" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-    RELATÓRIO
-  </a>
-</div>
-
 <!-- Conteúdo principal -->
-<div class="container container-main">
+ <div class="corpo">
   <form method="POST" action="{% url 'deletar-generico' %}">
     {% csrf_token %}
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2><i class="fas fa-hotel me-2"></i>Hotéis Cadastrados</h2>
-    </div>
+    <h>
+      Hotéis Cadastrados
+    </h>
+    
+    <div class="right-buttons">
+            
+            <a href="{% url 'cadastrar-hotel' %}" class="blue-button">
+              <img src="{% static 'images/white version/plus.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
+        Adicionar
+        </a>
+    
+            <button type="submit" onclick="return confirm('Tem certeza que deseja deletar os itens selecionados?')">
+              <img src="{% static 'images/white version/trash.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
+        Excluir
+      </button>
+        </div>
 
     <input type="hidden" name="model" value="Hotel">
     <input type="hidden" name="redirect_to" value="listar-hoteis">
@@ -187,14 +129,6 @@
       </div>
     </div>
   
-    <div class="text-end mt-3">
-      <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja deletar os itens selecionados?')">
-        Deletar selecionados
-      </button>
-
-      <a href="{% url 'cadastrar-hotel' %}" class="btn btn-success">
-        + Adicionar Hotel
-    </a>
     
     </div>
   </form>
@@ -226,6 +160,6 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+</div>
 </body>
 </html>
