@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .models import Profile, Restaurante
+from .models import Profile, Restaurante,Colaborador,Obra
 from django.contrib.auth.models import Group,User
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated
