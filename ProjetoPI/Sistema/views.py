@@ -17,6 +17,7 @@ from rest_framework.authtoken.models import Token
 import logging
 from django.apps import apps
 from django.http import HttpResponseForbidden
+from django.core.exceptions import ObjectDoesNotExist
 
 
 @api_view(['GET'])
@@ -88,13 +89,9 @@ def excluir_colaborador(request, id):
     
     if request.method == 'POST':
         colaborador.delete()
-        return redirect('listar-colaboradores')  # Redireciona para a lista após excluir
+        return redirect('listar-colaboradores') 
     
     return render(request, 'excluir-colaborador.html', {'colaborador': colaborador})
-
-
-from django.core.exceptions import ObjectDoesNotExist
-
 
 @login_required
 def cadastro_colaborador(request):
