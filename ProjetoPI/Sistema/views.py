@@ -60,20 +60,62 @@ def logout(request):
 def home(request):
     return render (request, 'home.html')
 
+@login_required
+def lista_colaboradores(request):
+    colaboradores = Colaborador.objects.all()  # Ou sua queryset personalizada
+    return render(request, 'listar-colaboradores.html', {'colaboradores': colaboradores}) 
+
+@login_required
+def editar_colaborador(request, id):
+    colaborador = get_object_or_404(Colaborador, pk=id)
+    
+    if request.method == 'POST':
+        form = ColaboradorForm(request.POST, instance=colaborador)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Colaborador atualizado com sucesso!')
+            return redirect('listar-colaboradores')
+    else:
+        form = ColaboradorForm(instance=colaborador)
+    
+    return render(request, 'editar-colaborador.html', {
+        'form': form,
+        'colaborador': colaborador
+    })
+@login_required
+def excluir_colaborador(request, id):
+    colaborador = get_object_or_404(Colaborador, pk=id)
+    
+    if request.method == 'POST':
+        colaborador.delete()
+        return redirect('listar-colaboradores')  # Redireciona para a lista após excluir
+    
+    return render(request, 'excluir-colaborador.html', {'colaborador': colaborador})
+
+
+from django.core.exceptions import ObjectDoesNotExist
+
 
 @login_required
 def cadastro_colaborador(request):
     if request.method == 'POST':
-        form = ColaboradorForm(request.POST, request.FILES)
+        form = ColaboradorForm(request.POST)
         if form.is_valid():
-            form.save()
+            colaborador = form.save()  
             messages.success(request, 'Colaborador cadastrado com sucesso!')
-            return redirect('cadastro_colaborador')  
+            return redirect('listar-colaboradores') 
+        else:
+            messages.error(request, 'Por favor, corrija os erros abaixo.')
     else:
         form = ColaboradorForm()
-
-    return render(request, 'cadastro.html', {'form': form})
-
+    
+    
+    obras = Obra.objects.all()
+    
+    return render(request, 'cadastro.html', {
+        'form': form,
+        'obras': obras
+    })
 @login_required
 def cadastroRestaurante(request):
     if request.method == 'POST':
