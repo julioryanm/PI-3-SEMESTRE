@@ -114,7 +114,7 @@ def cadastro_colaborador(request):
         'obras': obras
     })
 @login_required
-def cadastroRestaurante(request):
+def cadastrar_restaurante(request):
     if request.method == 'POST':
         form = CadastroRestauranteForm(request.POST)
         if form.is_valid():
@@ -129,7 +129,37 @@ def cadastroRestaurante(request):
     else:
         form = CadastroRestauranteForm()
 
-    return render(request, 'cadastroRestaurante.html', {'form': form})
+    return render(request, 'cadastrar-restaurante.html', {'form': form})
+
+@login_required
+def editar_restaurante(request, id):
+    restaurante = get_object_or_404(Restaurante, id=id)
+
+    if request.method == 'POST':
+        form = CadastroRestauranteForm(request.POST, instance=restaurante)
+        if form.is_valid():
+            restaurante = form.save(commit=False)
+            restaurante.endereco = form.endereco_formatado 
+            restaurante.save()
+
+            messages.success(request, 'Restaurante atualizado com sucesso!')
+            return redirect('listar-restaurantes')
+        else:
+            messages.error(request, 'Por favor, corrija os erros no formulário.')
+    else:
+        form = CadastroRestauranteForm(instance=restaurante)
+
+    return render(request, 'editar-restaurante.html', {'form': form, 'restaurante': restaurante})
+
+@login_required
+def excluir_restaurante(request, id):
+    restaurante = get_object_or_404(Restaurante, id=id)
+
+    if request.method == 'POST':
+        restaurante.delete()
+        return redirect('listar-restaurantes') 
+
+    return redirect('listar-restaurantes')
               
 logger = logging.getLogger(__name__)
 
@@ -257,8 +287,8 @@ def listar_colaboradores(request):
 
 @login_required
 def listar_restaurantes(request, ):
-    restaurante = Restaurante.objects.all()
-    context = {'restaurante': restaurante}
+    restaurantes = Restaurante.objects.all()
+    context = {'restaurantes': restaurantes}
     return render (request, 'lista-restaurantes.html', context)
 
 
