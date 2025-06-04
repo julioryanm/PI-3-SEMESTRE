@@ -16,7 +16,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.authtoken.models import Token
 import logging
 from django.apps import apps
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseBadRequest
 
 
 @api_view(['GET'])
@@ -121,13 +121,23 @@ def editar_hotel(request, id):
     hotel = get_object_or_404(Hotel, id=id)
     if request.method == 'POST':
         form = CadastroHotelForm(request.POST, instance=hotel)
-    if form.is_valid():
+        if form.is_valid():
             form.save()
-            return redirect('editar')
+            return redirect('listar-hoteis')
     else:
         form = CadastroHotelForm(instance=hotel)
-
     return render(request, 'editar-hotel.html', {'form': form, 'contato': hotel})  
+
+
+@login_required
+def redirecionar_edicao_hotel(request):
+    if request.method == 'POST':
+        hotel_id = request.POST.get('hotel_id')
+        if hotel_id:
+            return redirect ('editar-hotel', id=hotel_id)
+        else:
+            return HttpResponseBadRequest("Nenhum hotel selecionado.")
+    return HttpResponseBadRequest("Requisição inválida.")
 
 
 
