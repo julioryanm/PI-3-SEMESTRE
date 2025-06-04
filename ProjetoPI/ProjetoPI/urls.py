@@ -6,14 +6,18 @@ from django.conf.urls.static import static
 
 from Sistema.views import (
     home, login,
-    cadastroRestaurante,
+    cadastrar_restaurante,
     cadastro_colaborador,
-    cadastrar_usuario,)
+    cadastrar_usuario,
+    editar_restaurante,
+    excluir_restaurante)
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('cadastroRestaurante/', cadastroRestaurante, name='cadastroRestaurante'),
+    path('cadastrar-restaurante/', cadastrar_restaurante, name='cadastrar-restaurante'),
+    path('editar-restaurante/<int:id>/', editar_restaurante, name='editar-restaurante'),
+    path('excluir-restaurante/<int:id>/', excluir_restaurante, name='excluir-restaurante'),
     path('', home, name='home'),
     path('login/', login, name='login'),
     path('logout/', views.logout, name='logout'),
