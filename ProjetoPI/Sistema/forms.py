@@ -21,12 +21,16 @@ class CadastroRestauranteForm(forms.ModelForm):
     class Meta:
         model = Restaurante
         fields = ['nome', 'cnpj', 'telefone', 'responsavel']
-
+    
     def clean(self):
         cleaned_data = super().clean()
         cep = cleaned_data.get('cep')
         numero = cleaned_data.get('numero')
         complemento = cleaned_data.get('complemento')
+
+        if not cep:
+            self.add_error('cep', 'O campo CEP é obrigatório.')
+            return cleaned_data  # Ou levante um ValidationError geral
 
         endereco_api = buscar_endereco_por_cep(cep)
         if not endereco_api:
