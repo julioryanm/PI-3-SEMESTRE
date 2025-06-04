@@ -150,6 +150,16 @@ class ColaboradorForm(forms.ModelForm):
             'nome', 'cpf', 'data_nascimento', 'telefone', 'endereco',
             'obra'
         ]
+        widgets = {
+            'data_nascimento': forms.DateInput(attrs={'type': 'date'}),
+            'telefone': forms.TextInput(attrs={'placeholder': '(00) 00000-0000'}),
+            'cpf': forms.TextInput(attrs={'placeholder': '000.000.000-00'}),
+        }
+    
+    def clean_cpf(self):
+        cpf = self.cleaned_data.get('cpf')
+        # Adicione aqui validações customizadas do CPF se necessário
+        return cpf
 
 class LoginForm(ModelForm):
     class Meta:

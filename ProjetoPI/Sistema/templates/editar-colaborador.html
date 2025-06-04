@@ -1,0 +1,136 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Colaborador</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Inclua sua navbar/sidebar aqui conforme seu template base -->
+
+<div class="content">
+    <div class="form-container">
+        <h1>Editar Colaborador: {{ colaborador.nome }}</h1>
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            <!-- Dados Pessoais -->
+            <div class="form-section">
+                <h2>Dados Pessoais</h2>
+                
+                <div class="form-group">
+                    <label for="id_nome">Nome completo</label>
+                    {{ form.nome }}
+                    {{ form.nome.errors }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_cpf">CPF</label>
+                    {{ form.cpf }}
+                    {{ form.cpf.errors }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_data_nascimento">Data de nascimento</label>
+                    {{ form.data_nascimento }}
+                    {{ form.data_nascimento.errors }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_telefone">Telefone</label>
+                    {{ form.telefone }}
+                    {{ form.telefone.errors }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_endereco">Endereço</label>
+                    {{ form.endereco }}
+                    {{ form.endereco.errors }}
+                </div>
+            </div>
+            
+            <!-- Dados Profissionais -->
+            <div class="form-section">
+                <h2>Dados Profissionais</h2>
+                
+                <div class="form-group">
+                    <label for="id_obra">Obra Vinculada</label>
+                    {{ form.obra }}
+                    {{ form.obra.errors }}
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                <a href="{% url 'listar-colaboradores' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Máscara para CPF
+document.getElementById('id_cpf').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 3) value = value.replace(/^(\d{3})/, '$1.');
+    if (value.length > 7) value = value.replace(/^(\d{3})\.(\d{3})/, '$1.$2.');
+    if (value.length > 11) value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})/, '$1.$2.$3-');
+    e.target.value = value;
+});
+
+// Máscara para Telefone
+document.getElementById('id_telefone').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 0) value = value.replace(/^(\d{0,2})/, '($1');
+    if (value.length > 3) value = value.replace(/^(\(\d{2})(\d)/, '$1) $2');
+    if (value.length > 10) value = value.replace(/(\d{5})(\d)/, '$1-$2');
+    e.target.value = value;
+});
+</script>
+
+</body>
+</html>
