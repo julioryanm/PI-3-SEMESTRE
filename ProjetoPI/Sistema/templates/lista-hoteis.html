@@ -80,16 +80,6 @@
 
 
     <div class="right-buttons">
-
-      <!-- Botão Editar (em um form separado) -->
-      <form method="post" action="{% url 'redirecionar-edicao-hotel' %}" style="display: inline;">
-        {% csrf_token %}
-        <input type="hidden" name="ids" id="id_editar">
-        <button type="submit" onclick="return enviarParaEdicao();">
-          <img src="{% static 'images/white version/edit.png' %}" height="15px" style="margin-right: 5px;">
-          Editar
-        </button>
-      </form>
             
             <a href="{% url 'cadastrar-hotel' %}" class="blue-button">
               <img src="{% static 'images/white version/plus.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
@@ -106,18 +96,17 @@
   
     <div class="card">
       <div class="table-responsive">
-
-
-        
         <table class="table table-striped table-bordered text-center align-middle">
           <thead>
             <tr>
-              <th>Selecionar</th>
-              <th>Nome</th>
-              <th>Endereço</th>
-              <th>CNPJ</th>
-              <th>Telefone</th>
-              <th>Responsável</th>
+              <th class="text-nowrap">Selecionar</th>
+              <th class="text-nowrap">Nome</th>
+              <th class="text-nowrap">Endereço</th>
+              <th class="text-nowrap">Cidade</th>
+              <th class="text-nowrap">CNPJ</th>
+              <th class="text-nowrap">Telefone</th>
+              <th class="text-nowrap">Responsável</th>
+              <th class="text-nowrap"> </th>
             </tr>
           </thead>
           <tbody>
@@ -126,21 +115,28 @@
                 <td>
                   <input type="checkbox" name="ids" value="{{ hotel.id }}">
                 </td>
-                <td>{{ hotel.nome }}</td>
-                <td>{{ hotel.endereco }}</td>
-                <td>{{ hotel.cnpj }}</td>
-                <td>{{ hotel.telefone }}</td>
-                <td>{{ hotel.responsavel }}</td>
+                <td class="text-nowrap">{{ hotel.nome }}</td>
+                <td class="text-nowrap">{{ hotel.endereco }}</td>
+                <td class="text-nowrap">{{ hotel.cidade }}</td>
+                <td class="text-nowrap">{{ hotel.cnpj }}</td>
+                <td class="text-nowrap">{{ hotel.telefone }}</td>
+                <td class="text-nowrap">{{ hotel.responsavel }}</td>
+                <td>
+                  <a href="{% url 'editar-hotel' hotel.id %}" class="btn btn-warning btn-sm text-white">
+                    <i class="fas fa-edit"></i> Editar
+                  </a>
+                </td>
               </tr>
             {% empty %}
               <tr>
-                <td colspan="6" class="text-center text-danger">
+                <td colspan="7" class="text-center text-danger">
                   Nenhum hotel cadastrado.
                 </td>
               </tr>
             {% endfor %}
           </tbody>
         </table>
+        
       </div>
     </div>
   

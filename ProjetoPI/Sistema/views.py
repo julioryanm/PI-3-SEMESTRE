@@ -157,6 +157,7 @@ def listar_hoteis(request):
 @login_required
 def editar_hotel(request, id):
     hotel = get_object_or_404(Hotel, id=id)
+    
     if request.method == 'POST':
         form = CadastroHotelForm(request.POST, instance=hotel)
         if form.is_valid():
@@ -164,7 +165,7 @@ def editar_hotel(request, id):
             return redirect('listar-hoteis')
     else:
         form = CadastroHotelForm(instance=hotel)
-    return render(request, 'editar-hotel.html', {'form': form, 'contato': hotel})  
+    return render(request, 'editar-hotel.html', {'form': form, 'hotel': hotel})  
 
 
 @login_required
@@ -188,6 +189,7 @@ def deletar_generico(request):
     if request.method == 'POST':
         model_name = request.POST.get('model')
         ids = request.POST.getlist('ids')
+        redirect_to = request.POST.get('redirect_to', 'home')
 
         if model_name not in ALLOWED_MODELS:
             return HttpResponseForbidden("Modelo não permitido.")
@@ -198,7 +200,7 @@ def deletar_generico(request):
         except Exception as e:
             print(f"Erro ao deletar: {e}")  
 
-        return redirect('home')  
+        return redirect(reverse(redirect_to))
     return redirect('home')
 
 

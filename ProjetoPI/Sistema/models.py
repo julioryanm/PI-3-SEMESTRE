@@ -237,7 +237,6 @@ class Restaurante(models.Model):
     )
     
 
-
  
 class Hotel(models.Model):
     

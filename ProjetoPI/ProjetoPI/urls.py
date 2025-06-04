@@ -28,6 +28,6 @@ urlpatterns = [
     path('listar-hoteis/', views.listar_hoteis, name='listar-hoteis'), 
     path('cadastrar-hotel/', views.cadastro_hotel, name='cadastrar-hotel'), 
     path('deletar/', views.deletar_generico, name='deletar-generico'),
-    path('editar/<int:id>/', views.editar_hotel, name='editar-hotel'),
+    path('editar-hotel/<int:id>/', views.editar_hotel, name='editar-hotel'),
     path('editar/', views.redirecionar_edicao_hotel, name='redirecionar-edicao-hotel'),    
 ]
