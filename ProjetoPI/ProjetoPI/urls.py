@@ -33,5 +33,9 @@ urlpatterns = [
     path('cadastrar-hotel/', views.cadastro_hotel, name='cadastrar-hotel'), 
     path('deletar/', views.deletar_generico, name='deletar-generico'),
     path('editar-hotel/<int:id>/', views.editar_hotel, name='editar-hotel'),
-    path('editar/', views.redirecionar_edicao_hotel, name='redirecionar-edicao-hotel'),    
+    path('editar/', views.redirecionar_edicao_hotel, name='redirecionar-edicao-hotel'),
+    path('listar-pedidos/', views.listar_pedidos, name='listar_pedidos'),
+    path('cadastrar-pedido/', views.adicionar_pedido, name='cadastrar_pedido'),
+    path('editar-pedido/<str:pedido_id>/', views.editar_pedido, name='editar_pedido'),
+    path('excluir-pedido/<str:pedido_id>/', views.excluir_pedido, name='excluir_pedido'),    
 ]
