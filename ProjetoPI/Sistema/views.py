@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import get_object_or_404
-from .forms import CadastroRestauranteForm, ColaboradorForm, LoginForm, User, CadastroHotelForm, Hotel
+from .forms import CadastroRestauranteForm, ColaboradorForm, LoginForm, User, CadastroHotelForm, Hotel, CadastroObraForm
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -84,6 +84,7 @@ def editar_colaborador(request, id):
         'form': form,
         'colaborador': colaborador
     })
+
 @login_required
 def excluir_colaborador(request, id):
     colaborador = get_object_or_404(Colaborador, pk=id)
@@ -306,8 +307,22 @@ def listar_restaurantes(request, ):
 
 
 @login_required
+def cadastro_obras(request):
+    if request.method == 'POST':
+        form = CadastroObraForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('listar-obras')
+    else: 
+        form = CadastroObraForm()
+        
+    return render(request, 'cadastrar-obra.html', {'form': form})
+
+@login_required
 def listar_obras(request):
-    return render (request, 'lista-obras.html')
+    obra = Obra.objects.all()
+    context = {'obra': obra}
+    return render (request, 'lista-obras.html', context)
 
 
 @login_required

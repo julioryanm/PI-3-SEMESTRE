@@ -5,13 +5,34 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.forms import User
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Restaurante, Colaborador, Profile, Hotel
+from .models import Restaurante, Colaborador, Profile, Hotel, Obra
 from django.core.exceptions import ValidationError
 from .api_utils.viacep import buscar_endereco_por_cep
 
- 
-# Cadatro restaurantes
-# class CadastroRestauranteForm(Restaurante):
+ #Cadastro Obra
+
+class CadastroObraForm(forms.ModelForm):
+    class Meta:
+        model = Obra
+        fields = [
+            'nome', 'empresa', 'endereco', 
+            'data_inicio', 'data_prevista_termino', 
+            'data_real_termino', 'status', 'descricao'
+        ]
+
+        widgets = {
+            'nome': forms.TextInput(attrs={'placeholder': 'Nome da Obra'}),
+            'empresa': forms.Select(),
+            'endereco': forms.TextInput(attrs={'placeholder': 'Endereço da Obra'}),
+            'data_inicio': forms.DateInput(attrs={'type': 'date'}),
+            'data_prevista_termino': forms.DateInput(attrs={'type': 'date'}),
+            'data_real_termino': forms.DateInput(attrs={'type': 'date'}),
+            'status': forms.Select(),  # campo de escolha
+            'descricao': forms.Textarea(attrs={'placeholder': 'Descrição da Obra'}),
+        }
+
+
+# Cadastro restaurantes
        
 class CadastroRestauranteForm(forms.ModelForm):
     cep = forms.CharField(max_length=9, required=True)

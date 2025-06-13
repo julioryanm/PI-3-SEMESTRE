@@ -4,12 +4,13 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
+  <title>Cadastro de Obras</title>
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
-  <!-- Sidebar -->
-  
+
+<!-- Sidebar -->
 <div class="sidebar">
     <!-- Ícone do usuário -->
      <div class="logout-container">
@@ -45,12 +46,12 @@
       RESTAURANTES
     </a>
 
-    <a href="{% url 'listar-obras' %}"class="active">
+    <a href="{% url 'listar-obras' %}">
       <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       OBRAS
     </a>
 
-    <a href="{% url 'listar-hoteis' %}">
+    <a href="{% url 'listar-hoteis' %}"class="active">
       <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       HOTÉIS
     </a>
@@ -66,19 +67,37 @@
     </a>
   </div>
 
-<img src="{% static 'images/paintocode.png' %}" alt="erro" style="position: fixed; bottom: 0; right: 0; width: 130px; height: 37px; margin-right: 5px;">
+<!-- Conteúdo principal -->
+<div class="corpo">
+    <h>
+      <img src="{% static 'images/blue version/bed-plus.png' %}" alt="error" height="50px" width="55px" style="margin-right: 15px;">
+      Cadastrar de Obras</h>
 
-  <h style="display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 100px; color: #ee1b2c; margin-left: 250px;">
-    
+    <form method="POST" action="{% url 'cadastrar-obra' %}">
+      {% csrf_token %}
 
-    <div class="right-buttons">
-      <a href="{% url 'cadastrar-obra' %}" class="blue-button">
-        <img src="{% static 'images/white version/plus.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
-  Adicionar
-  </a>
+      <div class="form-section">
 
+        <h2>Dados:</h2>
 
-  </h>
+      {% for field in form %}
+          <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+          
+            {{ field.errors }}
+          {% endif %}
+      {% endfor %}
+      </div>
 
+        <button type="submit">Cadastrar Obra</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</div>
 </body>
 </html>
