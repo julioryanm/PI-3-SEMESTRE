@@ -1,84 +1,146 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <title>Lista de Obras | PI-3-SEMESTRE</title>
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
-  <!-- Sidebar -->
-  
-<div class="sidebar">
-    <!-- Ícone do usuário -->
-     <div class="logout-container">
-    <img src="{% static 'images/white version/user.png' %}" alt="error" height="65px" width="65px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
 
-    <!-- Botão de sair abaixo do ícone -->
-    
-      <form method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit" class="sair-btn">
-          <img src="{% static 'images/logout.png' %}" alt="error" height="15px" width="15px">
-          Sair
-        </button>
-      </form>
+  <div class="page-container" style="display: flex; min-height: 100vh;">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logout-container">
+        <img src="{% static 'images/white version/user.png' %}" alt="error" height="65" width="65" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+        <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="sair-btn">
+            <img src="{% static 'images/logout.png' %}" alt="error" height="15" width="15">
+            Sair
+          </button>
+        </form>
+      </div>
+
+      <label>Navegação</label>
+      <hr>
+      <a href="{% url 'home' %}">
+        <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20" width="20" style="margin-right: 10px; margin-left: 10px;">
+        INICIO
+      </a>
+
+      <a href="{% url 'listar-colaboradores' %}">
+        <img src="{% static 'images/white version/func.png' %}" alt="error" height="20" width="20" style="margin-right: 10px; margin-left: 10px;">
+        COLABORADORES
+      </a>
+
+      <a href="{% url 'listar-restaurantes' %}">
+        <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20" width="20" style="margin-right: 10px; margin-left: 10px;">
+        RESTAURANTES
+      </a>
+
+      <a href="{% url 'listar-obras' %}" class="active">
+        <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20" width="20" style="margin-right: 10px; margin-left: 10px;">
+        OBRAS
+      </a>
+
+      <a href="{% url 'listar-hoteis' %}">
+        <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20" width="20" style="margin-right: 10px; margin-left: 10px;">
+        HOTÉIS
+      </a>
+
+      <a href="{% url 'cadastrar_usuario' %}">
+        <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20" width="20" style="margin-right: 10px; margin-left: 10px;">
+        USUÁRIOS
+      </a>
+
+      <a href="{% url 'relatorio' %}">
+        <img src="{% static 'images/white version/dash.png' %}" alt="error" height="20" width="20" style="margin-right: 10px; margin-left: 10px;">
+        DASHBOARD
+      </a>
     </div>
 
-    <!-- Links do menu -->
+    <!-- Conteúdo principal -->
+    <div class="corpo">
 
-    <label>Navegeção</label>
-    <hr>
-    <a href="{% url 'home' %}">
-      <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      INICIO
+      <form method="POST" action="{% url 'deletar-generico' %}">
+        {% csrf_token %}
+        <input type="hidden" name="model" value="Obra">
+        <input type="hidden" name="redirect_to" value="listar-obras">
+      
+      <h>Obras Cadastradas</h>
+      <div class="right-buttons">
+        <a href="{% url 'cadastrar-obra' %}" class="blue-button">
+          <img src="{% static 'images/white version/plus.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
+    Adicionar
     </a>
 
-    <a href="{% url 'listar-colaboradores' %}">
-      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      COLABORADORES
-    </a>
-
-    <a href="{% url 'listar-restaurantes' %}">
-      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      RESTAURANTES
-    </a>
-
-    <a href="{% url 'listar-obras' %}"class="active">
-      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      OBRAS
-    </a>
-
-    <a href="{% url 'listar-hoteis' %}">
-      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      HOTÉIS
-    </a>
-
-    <a href="{% url 'cadastrar_usuario' %}">
-      <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      USUÁRIOS
-    </a>
-
-    <a href="{% url 'relatorio' %}">
-      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      DASHBOARD
-    </a>
+    <button type="submit" onclick="return confirm('Tem certeza que deseja deletar os itens selecionados?')">
+      <img src="{% static 'images/white version/trash.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
+      Excluir
+</div>
+<form method="POST" action="{% url 'deletar-generico' %}">
+  {% csrf_token %}
+  <input type="hidden" name="model" value="Obra">
+  <input type="hidden" name="redirect_to" value="listar-obras">
+  
+  <div class="cards-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px; justify-content: flex-start;">
+  
+    {% for obra in obras %}
+      <div class="card" style="width: 270px; border: 1px solid #ccc; border-radius: 8px; padding: 18px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background: white;">
+        
+        <!-- Checkbox -->
+        <input type="checkbox" name="ids" value="{{ obra.id }}" style="margin-bottom: 8px;">
+  
+        <h3>{{ obra.nome }}</h3>
+        <p><strong>Responsável:</strong> {{ obra.empresa }}</p>
+        <p><strong>Data Início:</strong> {{ obra.data_inicio }}</p>
+        <p><strong>Previsão Término:</strong> {{ obra.data_prevista_termino }}</p>
+  
+        <div class="detalhes-extra" style="display: none; margin-top: 15px; font-size: 14px; color: #333;">
+          <p><strong>Descrição:</strong> {{ obra.descricao }}</p>
+          <p><strong>Localização:</strong> {{ obra.localizacao }}</p>
+        </div>
+  
+        <!-- Ícone de editar -->
+        <a href="{% url 'editar-obra' obra.id %}" title="Editar">
+          <img src="{% static 'images/white version/pencil.png' %}" 
+               alt="Editar" 
+               height="20px" 
+               width="20px"
+               style="border: 4px solid #004aad; border-radius: 5px; padding: 3px; background-color: #004aad;">
+        </a>
+  
+        <!-- Botão Ver Detalhes -->
+        <button class="blue-button" type="button" style="margin-top: 15px; padding: 8px 12px; background-color: #004aad; color: white; border-radius: 4px; border: none; cursor: pointer; font-weight: 600;">
+          Ver Detalhes
+        </button>
+      </div>
+    {% endfor %}
+  
   </div>
+  
 
-<img src="{% static 'images/paintocode.png' %}" alt="erro" style="position: fixed; bottom: 0; right: 0; width: 130px; height: 37px; margin-right: 5px;">
+  </form>
 
-  <h style="display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 100px; color: #ee1b2c; margin-left: 250px;">
-    
-
-    <div class="right-buttons">
-      <a href="{% url 'cadastrar-obra' %}" class="blue-button">
-        <img src="{% static 'images/white version/plus.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
-  Adicionar
-  </a>
-
-
-  </h>
+  <script>
+    document.querySelectorAll('.cards-container .blue-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const card = button.closest('.card');
+        const detalhes = card.querySelector('.detalhes-extra');
+        if (detalhes.style.display === 'none' || detalhes.style.display === '') {
+          detalhes.style.display = 'block';
+          button.textContent = 'Ocultar Detalhes';
+        } else {
+          detalhes.style.display = 'none';
+          button.textContent = 'Ver Detalhes';
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>

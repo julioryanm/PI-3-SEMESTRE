@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .models import Profile, Restaurante,Colaborador,Obra
+from .models import Profile, Restaurante,Colaborador, Obra
 from django.contrib.auth.models import Group,User
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated
@@ -320,10 +320,33 @@ def cadastro_obras(request):
 
 @login_required
 def listar_obras(request):
-    obra = Obra.objects.all()
-    context = {'obra': obra}
+    obras = Obra.objects.all()
+    context = {'obras': obras}
     return render (request, 'lista-obras.html', context)
 
+
+
+@login_required
+def editar_obra(request, id):
+    obra = get_object_or_404(Obra, id=id)
+
+    if request.method == 'POST':
+        form = CadastroObraForm(request.POST, instance=obra)  
+        if form.is_valid():
+            form.save()
+            return redirect('listar-obras')  
+    else:
+        form = CadastroObraForm(instance=obra)  
+
+    return render(request, 'editar-obra.html', {'form': form})
+
+
+@login_required
+def detalhes_obra(request, id):
+    obra = get_object_or_404(Obra, id=id)
+    return render(request, 'detalhes-obra.html', {'obra': obra})
+
+    
 
 @login_required
 def relatorio(request):

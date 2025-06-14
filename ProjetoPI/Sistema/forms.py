@@ -22,7 +22,7 @@ class CadastroObraForm(forms.ModelForm):
 
         widgets = {
             'nome': forms.TextInput(attrs={'placeholder': 'Nome da Obra'}),
-            'empresa': forms.Select(),
+            'empresa': forms.TextInput(attrs={'placeholder': 'Nome da empresa responsável'}),
             'endereco': forms.TextInput(attrs={'placeholder': 'Endereço da Obra'}),
             'data_inicio': forms.DateInput(attrs={'type': 'date'}),
             'data_prevista_termino': forms.DateInput(attrs={'type': 'date'}),

@@ -36,7 +36,7 @@ class ObraAdmin(admin.ModelAdmin):
     list_filter = ('status', 'empresa', 'data_inicio')
     search_fields = ('nome', 'empresa__nome')
     date_hierarchy = 'data_inicio'
-    raw_id_fields = ('empresa',)
+    #raw_id_fields = ('empresa',)
     list_per_page = 30
     ordering = ('-data_inicio',)
 

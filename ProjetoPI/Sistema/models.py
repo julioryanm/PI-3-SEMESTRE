@@ -97,12 +97,11 @@ class Obra(models.Model):
         max_length=100,
         verbose_name="Nome da Obra"
     )
-    empresa = models.ForeignKey(
-        EmpresaParceira,
-        on_delete=models.CASCADE,
-        verbose_name="Empresa Responsável",
-        related_name='obras'
+    empresa = models.CharField(
+        max_length=100,
+        verbose_name="Empresa Responsável"
     )
+    
     endereco = models.TextField(
         verbose_name="Endereço Completo"
     )
