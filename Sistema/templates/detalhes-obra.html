@@ -1,0 +1,31 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Detalhes da Obra</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+
+<body>
+
+  <!-- Seu menu sidebar aqui -->
+
+  <div class="corpo">
+    <h2>Detalhes da Obra: {{ obra.nome }}</h2>
+
+    <p><strong>Responsável:</strong> {{ obra.empresa }}</p>
+    <p><strong>Endereço:</strong> {{ obra.endereco }}</p>
+    <p><strong>Data Início:</strong> {{ obra.data_inicio }}</p>
+    <p><strong>Previsão Término:</strong> {{ obra.data_prevista_termino }}</p>
+    <p><strong>Data Real Término:</strong> {{ obra.data_real_termino }}</p>
+    <p><strong>Status:</strong> {{ obra.status }}</p>
+    <p><strong>Descrição:</strong> {{ obra.descricao }}</p>
+
+    <a href="{% url 'editar-obra' obra.id %}" class="blue-button">Editar</a>
+    <a href="{% url 'listar-obras' %}" class="blue-button">Voltar</a>
+  </div>
+
+</body>
+</html>
