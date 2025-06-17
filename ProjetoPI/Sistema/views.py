@@ -17,8 +17,10 @@ from rest_framework.authtoken.models import Token
 import logging
 from django.apps import apps
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
-from Sistema.utils.mongo.mongo_model import Pedido
+from Sistema.utils.mongo.mongo_model import ControleRefeicoes
 from bson import ObjectId
+
+pedido_model = ControleRefeicoes()
 
 
 @api_view(['GET'])
@@ -352,34 +354,22 @@ def detalhes_obra(request, id):
 def relatorio(request):
     return render (request, 'relatorio.html')
 
-
-pedido_model = Pedido()
-
-@login_required
-def listar_pedidos(request):
-    pedidos = pedido_model.listar_pedidos()
-    return render(request, "listar-pedidos.html", {"pedidos": pedidos})
-
-@login_required
-def adicionar_pedido(request):
-    if request.method == "POST":
-        tipo = request.POST.get("tipo")
-        valor = request.POST.get("valor")
-        pedido_model.criar_pedido(tipo, valor)
-        return redirect("listar_pedidos")
-    return render(request, "cadastrar-pedido.html")
-
-@login_required
-def editar_pedido(request, pedido_id):
-    pedido = pedido_model.buscar_pedido(pedido_id)
-    if request.method == "POST":
-        tipo = request.POST.get("tipo")
-        valor = request.POST.get("valor")
-        pedido_model.atualizar_pedido(pedido_id, tipo, valor)
-        return redirect("listar_pedidos")
-    return render(request, "editar-pedido.html", {"pedido": pedido})
-
 @login_required
 def excluir_pedido(request, pedido_id):
     pedido_model.excluir_pedido(pedido_id)
     return redirect("listar_pedidos")
+
+@login_required
+def listar_pedidos(request):
+    colaboradores = Colaborador.objects.all()
+    return render(request, 'listar-pedidos.html', {'colaboradores': colaboradores})
+
+@login_required
+def cadastrar_pedido(request):
+    if request.method == "POST":
+        data = request.POST.get("data")
+        refeicoes_ids = request.POST.getlist("refeicoes")
+        pedido_model.registrar_refeicoes(data, refeicoes_ids, request.user)
+        return redirect("listar_pedidos")
+    return redirect("listar_pedidos")
+
