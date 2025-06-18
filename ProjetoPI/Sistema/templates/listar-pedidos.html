@@ -1,22 +1,179 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Lista de Pedidos</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <title>Controle de Refeição Diária</title>
 </head>
 <body>
-    <h1>Pedidos</h1>
-    <a href="{% url 'cadastrar_pedido' %}">Adicionar Pedido</a>
-    <ul>
-        {% for pedido in pedidos %}
-            <li>
-                Tipo: {{ pedido.tipo }} | Valor: {{ pedido.valor }}
-             <a href="{% url 'editar_pedido' pedido.id %}">Editar</a>
-             <a href="{% url 'excluir_pedido' pedido.id %}">Excluir</a> 
-            </li>
-        {% empty %}
-            <li>Nenhum pedido encontrado.</li>
-        {% endfor %}
-    </ul>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Ícone do usuário -->
+     <div class="logout-container">
+    <img src="{% static 'images/white version/user.png' %}" alt="error" height="65px" width="65px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+
+    <!-- Botão de sair abaixo do ícone -->
+    
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="sair-btn">
+          <img src="{% static 'images/logout.png' %}" alt="error" height="15px" width="15px">
+          Sair
+        </button>
+      </form>
+    </div>
+
+    <!-- Links do menu -->
+
+    <label>Navegeção</label>
+    <hr>
+    <a href="{% url 'home' %}">
+      <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      INICIO
+    </a>
+
+    <a href="{% url 'listar_pedidos' %}">
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      REFEIÇÕES
+    </a>
+
+    <a href="{% url 'listar-colaboradores' %}">
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      COLABORADORES
+    </a>
+
+    <a href="{% url 'listar-restaurantes' %}">
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      RESTAURANTES
+    </a>
+
+    <a href="{% url 'listar-obras' %}">
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      OBRAS
+    </a>
+
+    <a href="{% url 'listar-hoteis' %}">
+      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      HOTÉIS
+    </a>
+
+
+    <a href="{% url 'cadastrar_usuario' %}">
+      <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      USUÁRIOS
+    </a>
+
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      DASHBOARD
+    </a>
+  </div>
+
+  <div class="corpo">
+    <div class="page-header">
+      <h1>Controle Diário de Alimentação</h1>
+    </div>
+
+    <form method="POST" action="{% url 'cadastrar_pedido' %}">
+      {% csrf_token %}
+      <div>
+        <label for="data">Data de Registro:</label>
+        <input type="date" id="data" name="data" required>
+      </div>
+
+      <div class="table-container">
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Obra</th>
+              <th>Alimentou-se?</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for colaborador in colaboradores %}
+            <tr>
+              <td>{{ colaborador.nome }}</td>
+              <td>{{ colaborador.obra.nome }}</td>
+              <td class="text-center">
+                <input type="checkbox" name="refeicoes" value="{{ colaborador.id }}">
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="empty-message">Nenhum colaborador cadastrado</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="right-buttons">
+        <button type="button" onclick="confirmarRegistro()" class="btn btn-primary">Registrar</button>
+
+      </div>
+    </form>
+  </div>
+  <div id="confirmModal" style="display:none; position:fixed; top:20%; left:30%; background:white; padding:30px; border:1px solid #333; z-index:1000; box-shadow: 0px 0px 10px black;">
+  <h3>Confirmar Registro</h3>
+    <p><strong>Data:</strong> <span id="modal-data"></span></p>
+    <p><strong>Colaboradores:</strong></p>
+    <ul id="modal-colaboradores"></ul>
+    <form id="formRegistro" method="POST" action="{% url 'cadastrar_pedido' %}">
+      {% csrf_token %}
+      <input type="hidden" name="data" id="form-data">
+      <div id="form-checkboxes"></div>
+      <button type="submit" class="btn btn-success">Confirmar</button>
+      <button type="button" onclick="fecharModal()">Cancelar</button>
+    </form>
+  </div>
+
+  <script>
+  function confirmarRegistro() {
+    const data = document.getElementById("data").value;
+    const checkboxes = document.querySelectorAll("input[name='refeicoes']:checked");
+    const modal = document.getElementById("confirmModal");
+    const modalData = document.getElementById("modal-data");
+    const modalColaboradores = document.getElementById("modal-colaboradores");
+    const formCheckboxes = document.getElementById("form-checkboxes");
+    const formData = document.getElementById("form-data");
+
+    if (!data || checkboxes.length === 0) {
+      alert("Selecione uma data e pelo menos um colaborador.");
+      return;
+    }
+
+    modalData.textContent = data;
+    modalColaboradores.innerHTML = "";
+    formCheckboxes.innerHTML = "";
+
+    checkboxes.forEach(cb => {
+      const row = cb.closest("tr");
+      const nome = row.querySelector("td").textContent;
+      const id = cb.value;
+
+      // Lista visual
+      const li = document.createElement("li");
+      li.textContent = nome + " - REFEIÇÃO REGISTRADA";
+      modalColaboradores.appendChild(li);
+
+      // Inputs reais para envio
+      const hiddenInput = document.createElement("input");
+      hiddenInput.type = "hidden";
+      hiddenInput.name = "refeicoes";
+      hiddenInput.value = id;
+      formCheckboxes.appendChild(hiddenInput);
+    });
+
+    formData.value = data;
+    modal.style.display = "block";
+  }
+
+  function fecharModal() {
+    document.getElementById("confirmModal").style.display = "none";
+  }
+</script>
+
 </body>
 </html>
