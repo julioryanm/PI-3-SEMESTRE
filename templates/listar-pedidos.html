@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Pedidos</title>
+</head>
+<body>
+    <h1>Pedidos</h1>
+    <a href="{% url 'cadastrar_pedido' %}">Adicionar Pedido</a>
+    <ul>
+        {% for pedido in pedidos %}
+            <li>
+                Tipo: {{ pedido.tipo }} | Valor: {{ pedido.valor }}
+             <a href="{% url 'editar_pedido' pedido.id %}">Editar</a>
+             <a href="{% url 'excluir_pedido' pedido.id %}">Excluir</a> 
+            </li>
+        {% empty %}
+            <li>Nenhum pedido encontrado.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
