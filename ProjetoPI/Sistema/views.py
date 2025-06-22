@@ -240,7 +240,7 @@ def deletar_generico(request):
 
 
 
-@login_required                  
+@login_required
 def cadastrar_usuario(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -250,50 +250,42 @@ def cadastrar_usuario(request):
         tipo = request.POST.get('tipo')
         admin_password = request.POST.get('admin_password', '')
 
-        # Validações
         if password != confirm_password:
             messages.error(request, 'As senhas não coincidem!')
             return redirect('cadastrar_usuario')
 
-        # Verifica se o usuário já existe ANTES de tentar criar
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Nome de usuário já está em uso!')
             return redirect('cadastrar_usuario')
 
-        # Verificação para admin
-        if tipo == 'admin' and admin_password != "Senha123": # Senha Supervisor
+        if tipo == 'admin' and admin_password != "Senha123":
             messages.error(request, 'Senha de administrador incorreta!')
             return redirect('cadastrar_usuario')
 
         try:
-            # Criação dos grupos 
             grupo_admin, _ = Group.objects.get_or_create(name='Administradores')
             grupo_encarregado, _ = Group.objects.get_or_create(name='Encarregados')
 
-            # Cria o usuário
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                password=password
-            )
+            user = User.objects.create_user(username=username, email=email, password=password)
 
-            
             if tipo == 'admin':
                 user.groups.add(grupo_admin)
                 user.is_staff = True
-                Token.objects.get_or_create(user=user)  # Token seguro
-                logger.info(f'Novo admin criado: {username}')
+                user.save()
             else:
                 user.groups.add(grupo_encarregado)
 
-            messages.success(request, 'Usuário criado com sucesso!')
+            # ✅ Cria o Profile com o tipo correto
+            Profile.objects.create(user=user, tipo=tipo)
+
+            messages.success(request, 'Usuário e perfil criados com sucesso!')
             return redirect('cadastrar_usuario')
 
         except Exception as e:
-            logger.error(f'Erro ao criar usuário: {str(e)}')
             messages.error(request, f'Erro no sistema: {str(e)}')
 
     return render(request, 'cadastrar_usuario.html')
+
 
 @login_required
 def listar_colaboradores(request):
