@@ -25,10 +25,10 @@ def permissoes_grupo(sender, **kwargs):
    
 
 
-@receiver(post_save, sender=User)
+'''@receiver(post_save, sender=User)
 def criar_profile_automanticamente(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        Profile.objects.create(user=instance)'''
 
 class EmpresaParceira(models.Model):
     """Modelo para empresas parceiras com validações aprimoradas"""
