@@ -17,7 +17,8 @@ class CadastroObraForm(forms.ModelForm):
         fields = [
             'nome', 'empresa', 'endereco', 
             'data_inicio', 'data_prevista_termino', 
-            'data_real_termino', 'status', 'descricao'
+            'data_real_termino', 'status', 'descricao',
+            'encarregado_responsavel'
         ]
 
         widgets = {
@@ -30,7 +31,11 @@ class CadastroObraForm(forms.ModelForm):
             'status': forms.Select(),  # campo de escolha
             'descricao': forms.Textarea(attrs={'placeholder': 'Descrição da Obra'}),
         }
-
+        
+    def __init__(self, *args, **kwargs):
+        super(CadastroObraForm, self).__init__(*args, **kwargs)
+        # Apenas usuários que têm profile do tipo encarregado
+        self.fields['encarregado_responsavel'].queryset = User.objects.filter(profile__tipo='encarregado')
 
 # Cadastro restaurantes
        
