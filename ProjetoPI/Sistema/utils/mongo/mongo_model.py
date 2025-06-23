@@ -32,3 +32,23 @@ class ControleRefeicoes:
 
         if registros:
             self.collection.insert_many(registros)
+
+    def listar_registros(self):
+        registros = list(self.collection.find())
+        for r in registros:
+            r["id"] = str(r["_id"])
+           # r["data_refeicao"] = r["data_refeicao"].strftime("%Y-%m-%d")
+        return registros
+
+    def buscar_registro(self, registro_id):
+        return self.collection.find_one({"_id": ObjectId(registro_id)})
+
+    def atualizar_data_refeicao(self, registro_id, nova_data):
+        data_formatada = datetime.strptime(nova_data, "%Y-%m-%d")
+        return self.collection.update_one(
+            {"_id": ObjectId(registro_id)},
+            {"$set": {"data_refeicao": data_formatada}}
+        )
+
+    def excluir_registro(self, registro_id):
+        return self.collection.delete_one({"_id": ObjectId(registro_id)})
