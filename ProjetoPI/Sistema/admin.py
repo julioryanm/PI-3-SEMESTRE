@@ -42,7 +42,7 @@ class ObraAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Identificação', {
-            'fields': ('nome', 'empresa', 'status')
+            'fields': ('nome', 'empresa', 'status', 'encarregado_responsavel')
         }),
         ('Datas', {
             'fields': ('data_inicio', 'data_prevista_termino', 'data_real_termino')
@@ -58,6 +58,12 @@ class ObraAdmin(admin.ModelAdmin):
     def dias_atraso_display(self, obj):
         return obj.dias_atraso or '-'
     dias_atraso_display.short_description = 'Dias de Atraso'
+    
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'encarregado_responsavel':
+            from django.contrib.auth.models import User
+            kwargs["queryset"] = User.objects.filter(profile__tipo='encarregado')
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class ColaboradorAdmin(admin.ModelAdmin):
