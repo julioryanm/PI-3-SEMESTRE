@@ -365,3 +365,24 @@ def cadastrar_pedido(request):
         return redirect("listar_pedidos")
     return redirect("listar_pedidos")
 
+@login_required
+def listar_registros(request):
+    registros = pedido_model.listar_registros()
+    return render(request, 'listar-registros.html', {'registros': registros})
+
+@login_required
+def editar_registro(request, registro_id):
+    registro = pedido_model.buscar_registro(registro_id)
+    if request.method == "POST":
+        nova_data = request.POST.get("data_refeicao")
+        pedido_model.atualizar_data_refeicao(registro_id, nova_data)
+        return redirect('listar_registros')
+    return render(request, 'editar-registro.html', {'registro': registro})
+
+@login_required
+def excluir_registro(request, registro_id):
+    pedido_model.excluir_registro(registro_id)
+    return redirect('listar_registros')
+
+
+
