@@ -72,14 +72,20 @@
 
   <div class="corpo">
     <div class="page-header">
-      <h1>Controle Diário de Alimentação</h1>
+      <h>Controle Diário de Alimentação</h>
     </div>
 
+    <div class="right-buttons">
+          <a href="{% url 'listar_registros' %}" class="blue-button">
+            <img src="{% static 'images/white version/plus.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
+            Registros</a>
+    </div>
+    
     <form method="POST" action="{% url 'cadastrar_pedido' %}">
       {% csrf_token %}
       <div>
         <label for="data">Data de Registro:</label>
-        <input type="date" id="data" name="data" required>
+        <input type="date" id="data" name="data" required min="2025-01-01">
       </div>
 
       <div class="table-container">
@@ -143,8 +149,8 @@
       alert("Selecione uma data e pelo menos um colaborador.");
       return;
     }
-
-    modalData.textContent = data;
+    const [ano, mes, dia] = data.split("-");
+    modalData.textContent = `${dia}/${mes}/${ano}`;
     modalColaboradores.innerHTML = "";
     formCheckboxes.innerHTML = "";
 
@@ -173,6 +179,14 @@
   function fecharModal() {
     document.getElementById("confirmModal").style.display = "none";
   }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const inputData = document.getElementById("data");
+      const hoje = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
+      inputData.value = hoje;
+      inputData.max = hoje; // bloqueia datas futuras
+  });
+
 </script>
 
 </body>
