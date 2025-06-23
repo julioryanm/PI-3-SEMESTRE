@@ -128,6 +128,13 @@ class Obra(models.Model):
         verbose_name="Descrição",
         blank=True
     )
+    encarregado_responsavel = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Encarregado Vinculado",
+        null=True,  # <--- Isso aqui resolve
+        blank=True  # <--- Opcional, só se quiser permitir campo vazio no formulário
+    )
 
     class Meta:
         verbose_name = "Obra"
