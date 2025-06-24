@@ -132,8 +132,9 @@ class Obra(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name="Encarregado Vinculado",
-        null=True,  # <--- Isso aqui resolve
-        blank=True  # <--- Opcional, só se quiser permitir campo vazio no formulário
+        null=True,  
+        blank=True, 
+        related_name='obras'
     )
 
     class Meta:

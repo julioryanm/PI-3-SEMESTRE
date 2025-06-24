@@ -56,7 +56,7 @@ class CadastroRestauranteForm(forms.ModelForm):
 
         if not cep:
             self.add_error('cep', 'O campo CEP é obrigatório.')
-            return cleaned_data  # Ou levante um ValidationError geral
+            return cleaned_data  
 
         endereco_api = buscar_endereco_por_cep(cep)
         if not endereco_api:
@@ -67,7 +67,7 @@ class CadastroRestauranteForm(forms.ModelForm):
             endereco_formatado += f" - {complemento}"
         endereco_formatado += f", {endereco_api['bairro']}, {endereco_api['localidade']} - {endereco_api['uf']}, CEP {cep}"
 
-        # Guarde o endereço formatado em um atributo extra no form para usar depois
+       
         self.endereco_formatado = endereco_formatado
 
         return cleaned_data
@@ -123,7 +123,7 @@ class CustomUserCreationForm(UserCreationForm):
         self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
         
-        # Se o usuário atual não for admin, remova a opção de admin
+        # Se o usuário atual não for admin
         if self.request and not self.request.user.is_superuser:
             self.fields['tipo'].choices = [
                 (value, label) for value, label in Profile.TIPOS_USUARIO 

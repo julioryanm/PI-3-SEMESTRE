@@ -95,14 +95,29 @@
         <!-- Checkbox -->
         <input type="checkbox" name="ids" value="{{ obra.id }}" style="margin-bottom: 8px;">
   
-        <h3>{{ obra.nome }}</h3>
-        <p><strong>Responsável:</strong> {{ obra.empresa }}</p>
+        <h2>{{ obra.nome }}</h2>
+        <p><strong>Encarregado:</strong> 
+          {% if obra.encarregado_responsavel %}
+            {{ obra.encarregado_responsavel.username }}
+          {% else %}
+            Não definido
+          {% endif %}
+        </p>
         <p><strong>Data Início:</strong> {{ obra.data_inicio }}</p>
         <p><strong>Previsão Término:</strong> {{ obra.data_prevista_termino }}</p>
   
         <div class="detalhes-extra" style="display: none; margin-top: 15px; font-size: 14px; color: #333;">
           <p><strong>Descrição:</strong> {{ obra.descricao }}</p>
-          <p><strong>Localização:</strong> {{ obra.localizacao }}</p>
+          <p><strong>Localização:</strong> {{ obra.endereco }}</p>
+          <p><strong>Empresa Responsável:</strong> {{ obra.empresa }}</p>
+          <p><strong>Colaboradores:</strong></p>
+          <ul>
+            {% for colaborador in obra.colaboradores.all %}
+              <li>{{ colaborador.nome }}</li>
+            {% empty %}
+              <li>Sem colaboradores vinculados</li>
+            {% endfor %}
+          </ul>
         </div>
   
         <!-- Ícone de editar -->
