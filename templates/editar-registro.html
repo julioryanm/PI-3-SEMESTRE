@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <title>Controle de Refeição Diária</title>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Ícone do usuário -->
+     <div class="logout-container">
+    <img src="{% static 'images/white version/user.png' %}" alt="error" height="65px" width="65px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+
+    <!-- Botão de sair abaixo do ícone -->
+    
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="sair-btn">
+          <img src="{% static 'images/logout.png' %}" alt="error" height="15px" width="15px">
+          Sair
+        </button>
+      </form>
+    </div>
+
+    <!-- Links do menu -->
+
+    <label>Navegeção</label>
+    <hr>
+    <a href="{% url 'home' %}">
+      <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      INICIO
+    </a>
+
+    <a href="{% url 'listar_pedidos' %}">
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      REFEIÇÕES
+    </a>
+
+    <a href="{% url 'listar-colaboradores' %}">
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      COLABORADORES
+    </a>
+
+    <a href="{% url 'listar-restaurantes' %}">
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      RESTAURANTES
+    </a>
+
+    <a href="{% url 'listar-obras' %}">
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      OBRAS
+    </a>
+
+    <a href="{% url 'listar-hoteis' %}">
+      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      HOTÉIS
+    </a>
+
+
+    <a href="{% url 'cadastrar_usuario' %}">
+      <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      USUÁRIOS
+    </a>
+
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      DASHBOARD
+    </a>
+  </div>
+    <h>Editar Refeição</h>
+
+    <div class="corpo">
+  <h1>Editar Refeição</h1>
+
+    <div class="registro-info" style="margin-bottom: 20px;">
+      <p><strong>Colaborador:</strong> {{ registro.colaborador_nome }}</p>
+      <p><strong>Obra:</strong> {{ registro.obra_nome }}</p>
+      <p><strong>Valor da Refeição:</strong> R$ {{ registro.valor_refeicao }}</p>
+      <p><strong>Registrado por:</strong> {{ registro.registrado_por_nome }}</p>
+      <p><strong>Data de Registro:</strong> {{ registro.registrado_em|date:"d/m/Y H:i" }}</p>
+    </div>
+
+  <form method="POST">
+    {% csrf_token %}
+    <label>Data da Refeição:</label>
+    <input type="date" name="data_refeicao" value="{{ registro.data_refeicao|date:'Y-m-d' }}" required min="2025-01-01">
+    <br><br>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a href="{% url 'listar_registros' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+
+</body>
+</html>

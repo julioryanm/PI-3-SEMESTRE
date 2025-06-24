@@ -1,0 +1,111 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Restaurante</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <!-- Ícone do usuário -->
+     <div class="logout-container">
+    <img src="{% static 'images/white version/user.png' %}" alt="error" height="75px" width="75px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+
+    <!-- Botão de sair abaixo do ícone -->
+    
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="sair-btn">
+          <img src="{% static 'images/logout.png' %}" alt="error" height="15px" width="15px">
+          Sair
+        </button>
+      </form>
+    </div>
+
+    <!-- Links do menu -->
+
+    <label>Navegeção</label>
+    <hr>
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Dashboard
+    </a>
+
+     <a href="{% url 'listar_pedidos' %}">
+      <img src="{% static 'images/white version/alim.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Refeições
+    </a>
+
+    <a href="{% url 'listar-colaboradores' %}">
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Colaboradores
+    </a>
+
+    <a href="{% url 'listar-restaurantes' %}">
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Restaurantes
+    </a>
+
+    <a href="{% url 'listar-obras' %}">
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Obras
+    </a>
+
+    <a href="{% url 'listar-hoteis' %}" class="active">
+      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Hotéis
+    </a>
+
+
+    <a href="{% url 'cadastrar_usuario' %}">
+      <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      Usuários
+    </a>
+
+    
+  </div>
+
+<!-- Conteúdo principal -->
+<div class="corpo">
+    <h>
+      <a href="{% url 'listar-hoteis' %}">
+            <img src="{% static 'images/blue version/back.png' %}"alt="Logo" height="20" width="20" style="margin-right: 35px;">
+        </a>
+      <img src="{% static 'images/blue version/bed-edit.png' %}" alt="Logo" height="50" width="65"
+             style="margin-right: 15px;">
+      Cadastrar de Hotéis</h>
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <div class="form-section">
+
+        <h2>Dados:</h2>
+
+      {% for field in form %}
+          <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+          
+            {{ field.errors }}
+          {% endif %}
+      {% endfor %}
+
+      </div>
+
+        <button type="submit">CONFIRMAR</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+</body>
+</html>
