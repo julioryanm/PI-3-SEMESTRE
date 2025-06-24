@@ -1,0 +1,218 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista Hotéis | PI-3-SEMESTRE</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+    <!-- Ícone do usuário -->
+     <div class="logout-container">
+    <img src="{% static 'images/white version/user.png' %}" alt="error" height="75px" width="75px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+
+    <!-- Botão de sair abaixo do ícone -->
+    
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="sair-btn">
+          <img src="{% static 'images/logout.png' %}" alt="error" height="15px" width="15px">
+          Sair
+        </button>
+      </form>
+    </div>
+
+    <!-- Links do menu -->
+
+    <label>Navegeção</label>
+    <hr>
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Dashboard
+    </a>
+
+     <a href="{% url 'listar_pedidos' %}">
+      <img src="{% static 'images/white version/alim.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Refeições
+    </a>
+
+    <a href="{% url 'listar-colaboradores' %}">
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Colaboradores
+    </a>
+
+    <a href="{% url 'listar-restaurantes' %}">
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Restaurantes
+    </a>
+
+    <a href="{% url 'listar-obras' %}">
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Obras
+    </a>
+
+    <a href="{% url 'listar-hoteis' %}" class="active">
+      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Hotéis
+    </a>
+
+
+    <a href="{% url 'cadastrar_usuario' %}">
+      <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      Usuários
+    </a>
+
+    
+  </div>
+
+<!-- Conteúdo principal -->
+ <div class="corpo">
+  <form method="POST" action="{% url 'deletar-generico' %}">
+    {% csrf_token %}
+  <input type="hidden" name="model" value="Hotel">
+<input type="hidden" name="redirect_to" value="listar-hoteis">
+    <h>
+      <img src="{% static 'images/blue version/double-bed.png' %}" alt="Logo" height="55" width="55"
+             style="margin-right: 15px;">
+      Hotéis Cadastrados
+    </h>
+    
+
+
+
+    <div class="right-buttons">
+            <a href="{% url 'cadastrar-hotel' %}" class="blue-button">
+              <img src="{% static 'images/white version/plus.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
+        Adicionar
+        </a>
+
+        <button type="submit" onclick="return confirm('Tem certeza que deseja deletar os itens selecionados?')">
+          <img src="{% static 'images/white version/trash.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
+          Excluir
+    </div>
+
+    <input type="hidden" name="model" value="Hotel">
+    <input type="hidden" name="redirect_to" value="listar-hoteis">
+  
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered text-center align-middle">
+          <thead>
+            <tr>
+              <th class="text-nowrap"></th>
+              <th class="text-nowrap">Nome</th>
+              <th class="text-nowrap">Endereço</th>
+              <th class="text-nowrap">Cidade</th>
+              <th class="text-nowrap">CNPJ</th>
+              <th class="text-nowrap">Telefone</th>
+              <th class="text-nowrap">Responsável</th>
+              <th class="text-nowrap">Editar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for hotel in hotel %}
+              <tr>
+                <td>
+                  <input type="checkbox" name="ids" value="{{ hotel.id }}">
+                </td>
+                <td class="text-nowrap">{{ hotel.nome }}</td>
+                <td class="text-nowrap">{{ hotel.endereco }}</td>
+                <td class="text-nowrap">{{ hotel.cidade }}</td>
+                <td class="text-nowrap">{{ hotel.cnpj }}</td>
+                <td class="text-nowrap">{{ hotel.telefone }}</td>
+                <td class="text-nowrap">{{ hotel.responsavel }}</td>
+                <td>
+                  <a href="{% url 'editar-hotel' hotel.id %}" class="blue-button">
+              <img src="{% static 'images/white version/pencil.png' %}" alt="Editar" height="15px" width="15px">
+            </a>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="7" class="text-center text-danger">
+                  Nenhum hotel cadastrado.
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        
+      </div>
+    </div>
+  
+    
+    </div>
+  </form>
+
+    <!-- NOVO FORMULÁRIO PARA EDITAR -->
+    <form method="post" action="{% url 'redirecionar-edicao-hotel' %}" style="display:inline;">
+      {% csrf_token %}
+      <input type="hidden" name="ids" id="id_editar">
+      <button type="submit" onclick="return enviarParaEdicao();">
+        <img src="{% static 'images/white version/trash.png' %}" height="15px"> Editar
+      </button>
+    </form>
+  
+</div>
+
+<!-- Scripts -->
+<script>
+  function submitForm(action) {
+    const form = document.getElementById('actionForm');
+    const selected = form.querySelector('input[name="ids"]:checked');
+    if (!selected) {
+      alert('Selecione um hotel.');
+      event.preventDefault();
+      return;
+    }
+    const id = selected.value;
+    if (action === 'editar') {
+      form.action = `/editar-hotel/${id}/`;
+    } else if (action === 'excluir') {
+      if (confirm("Tem certeza que deseja excluir?")) {
+        form.action = `/deletar/`;
+      } else {
+        event.preventDefault();
+      }
+    }
+  }
+</script>
+
+<!-- Script para capturar o ID do item selecionado -->
+<script>
+  function enviarParaEdicao() {
+    const checkbox = document.querySelector('input[name="ids"]:checked');
+    if (!checkbox) {
+      alert("Selecione um hotel para editar.");
+      return false;
+    }
+    document.getElementById('id_editar').value = checkbox.value;
+    return true;
+  }
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+
+<script>
+  function enviarParaEdicao() {
+    const checkbox = document.querySelector('input[name="ids"]:checked');
+    if (!checkbox) {
+      alert('Selecione um hotel para editar.');
+      return false;
+    }
+    document.getElementById('id_editar').value = checkbox.value;
+    return true;
+  }
+</script>
+
+
+</body>
+</html>

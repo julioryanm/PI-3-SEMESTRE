@@ -1,0 +1,167 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+  <!-- Sidebar -->
+  
+  <div class="sidebar">
+    <!-- Ícone do usuário -->
+     <div class="logout-container">
+    <img src="{% static 'images/white version/user.png' %}" alt="error" height="75px" width="75px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+
+    <!-- Botão de sair abaixo do ícone -->
+    
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="sair-btn">
+          <img src="{% static 'images/logout.png' %}" alt="error" height="15px" width="15px">
+          Sair
+        </button>
+      </form>
+    </div>
+
+    <!-- Links do menu -->
+
+    <label>Navegeção</label>
+    <hr>
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Dashboard
+    </a>
+
+     <a href="{% url 'listar_pedidos' %}">
+      <img src="{% static 'images/white version/alim.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Refeições
+    </a>
+
+    <a href="{% url 'listar-colaboradores' %}">
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Colaboradores
+    </a>
+
+    <a href="{% url 'listar-restaurantes' %}" class="active">
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Restaurantes
+    </a>
+
+    <a href="{% url 'listar-obras' %}">
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Obras
+    </a>
+
+    <a href="{% url 'listar-hoteis' %}">
+      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Hotéis
+    </a>
+
+
+    <a href="{% url 'cadastrar_usuario' %}">
+      <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      Usuários
+    </a>
+
+    
+  </div>
+
+<!-- Conteúdo Principal -->
+<div class="corpo">
+
+    <form method="POST" action="{% url 'deletar-generico' %}">
+  {% csrf_token %}
+<input type="hidden" name="model" value="Restaurante">
+<input type="hidden" name="redirect_to" value="listar-restaurantes">
+        <h>
+          <img src="{% static 'images/blue version/cutlery.png' %}" alt="Logo" height="55" width="55" style="margin-right: 15px;">
+          Restaurantes
+        </h>
+        
+        <div class="right-buttons">
+          <a href="{% url 'cadastrar-restaurante' %}" class="blue-button">
+            <img src="{% static 'images/white version/plus.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
+            Adicionar</a>
+          </button>
+
+          <button type="submit" onclick="return confirm('Tem certeza que deseja deletar os itens selecionados?')">
+      <img src="{% static 'images/white version/trash.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
+      Excluir
+    </button>
+        </div>
+
+
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered text-center align-middle">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Nome</th>
+        <th>CNPJ</th>
+        <th>Endereço</th>
+        <th>Telefone</th>
+        <th>Responsável</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for restaurante in restaurantes %}
+        <tr>
+          <td>
+            <input type="checkbox" name="ids" value="{{restaurante.id }}">
+          </td>
+          <td>{{ restaurante.nome }}</td>
+          <td>{{ restaurante.cnpj }}</td>
+          <td>{{ restaurante.endereco }}</td>
+          <td>{{ restaurante.telefone }}</td>
+          <td>{{ restaurante.responsavel }}</td>
+          <td>
+            <a href="{% url 'editar-restaurante' restaurante.id %}" class="blue-button">
+              <img src="{% static 'images/white version/pencil.png' %}" alt="Editar" height="15px" width="15px">
+            </a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6" class="text-center text-danger">Nenhum restaurante cadastrado.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </form>
+  </table>
+</div>
+
+
+<!-- JavaScript para ação dos botões -->
+<script>
+  function submitForm(action) {
+    const form = document.getElementById('actionForm');
+    const selected = form.querySelector('input[name="restaurante_id"]:checked');
+
+    if (!selected) {
+      alert('Selecione um restaurante.');
+      event.preventDefault();
+      return;
+    }
+    const id = selected.value;
+    if (action === 'editar') {
+      form.action = `/editar-restaurante/${id}/`;
+    } else if (action === 'excluir') {
+      if (confirm("Tem certeza que deseja excluir?")) {
+        form.action = `/excluir_restaurante/${id}/`;
+      } else {
+        event.preventDefault();
+      }
+    }
+  }
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

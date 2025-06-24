@@ -1,0 +1,173 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <title>Cadastro de Restaurante</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+
+<div class="sidebar">
+    <!-- Ícone do usuário -->
+     <div class="logout-container">
+    <img src="{% static 'images/white version/user.png' %}" alt="error" height="75px" width="75px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+
+    <!-- Botão de sair abaixo do ícone -->
+    
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="sair-btn">
+          <img src="{% static 'images/logout.png' %}" alt="error" height="15px" width="15px">
+          Sair
+        </button>
+      </form>
+    </div>
+
+    <!-- Links do menu -->
+
+    <label>Navegeção</label>
+    <hr>
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Dashboard
+    </a>
+
+     <a href="{% url 'listar_pedidos' %}">
+      <img src="{% static 'images/white version/alim.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Refeições
+    </a>
+
+    <a href="{% url 'listar-colaboradores' %}">
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Colaboradores
+    </a>
+
+    <a href="{% url 'listar-restaurantes' %}" class="active">
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Restaurantes
+    </a>
+
+    <a href="{% url 'listar-obras' %}">
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Obras
+    </a>
+
+    <a href="{% url 'listar-hoteis' %}">
+      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Hotéis
+    </a>
+
+
+    <a href="{% url 'cadastrar_usuario' %}">
+      <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      Usuários
+    </a>
+
+    
+  </div>
+
+  <div class="corpo">
+    <h>
+      <a href="{% url 'listar-restaurantes' %}">
+            <img src="{% static 'images/blue version/back.png' %}"alt="Logo" height="20" width="20" style="margin-right: 35px;">
+        </a>
+      <img src="{% static 'images/blue version/cutlery-plus.png' %}" alt="error" height="50px" width="65px" style="margin-right: 15px;">
+      Cadastro de Restaurante
+    </h>
+
+    <form method="POST" action="{% url 'cadastrar-restaurante' %}">
+        {% csrf_token %}
+
+<div class="form-section">
+<h2>Dados:</h2>
+  <div class="row">
+
+  <div class="form-group">
+    <label for="nome">Nome:</label>
+           {{form.nome}}
+        </div>
+
+<div class="line">
+  <div class="form-group">
+    <label for="cnpj">CNPJ:</label>
+            {{form.cnpj}}
+        </div>
+
+        <div class="form-group">
+          <label for="telefone">Telefone:</label>
+            {{form.telefone}}
+        </div>
+        </div>
+  </div> 
+
+  <div class="form-group">
+        <label for="telefone">Responsável:</label>
+            {{form.responsavel}}
+        </div>
+
+<hr>
+
+<h2>Endereço:</h2>
+       
+    <div class="line">
+        <div class="form-group">
+            <label for="cep">CEP:</label>
+            <input type="text" id="cep" name="cep" maxlength="9" required />
+        </div>
+    </div>
+        
+
+        <div class="row">
+        <!-- Campos visíveis preenchidos via JS -->
+         <div class="form-group">
+            <label for="rua">Rua:</label>
+            <input type="text" id="rua" name="rua" readonly />
+        </div>
+
+        <div class="form-group">
+            <label for="bairro">Bairro:</label>
+            <input type="text" id="bairro" name="bairro" readonly />
+        </div>
+
+        </div>
+        <div class="row">
+        <div class="line">
+        <div class="form-group">
+            <label for="cidade">Cidade:</label>
+            <input type="text" id="cidade" name="cidade" readonly />
+        </div>
+
+        <div class="form-group">
+            <label for="estado">Estado:</label>
+            <input type="text" id="estado" name="estado" readonly />
+        </div>
+
+        </div>
+
+        <div class="form-group">
+            <label for="numero">Número:</label>
+            <input type="text" id="numero" name="numero" required />
+        </div>
+        </div>
+
+        <div class="form-group">
+            <label for="complemento">Complemento:</label>
+            <input type="text" id="complemento" name="complemento" />
+        </div>
+
+        <!-- Campo oculto que envia o endereço completo para o backend -->
+        <input type="hidden" name="endereco" id="endereco" />
+        {% if form.endereco.errors %}
+            <p style="color: red;">{{ form.endereco.errors }}</p>
+        {% endif %}
+</div>
+        <button type="submit">CADASTRAR</button>
+    </form>
+
+    <script src="{% static 'js/busca_cep.js' %}"></script>
+
+    </div>
+</body>
+</html>
