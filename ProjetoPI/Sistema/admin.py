@@ -42,7 +42,7 @@ class ObraAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Identificação', {
-            'fields': ('nome', 'empresa', 'status', 'encarregado_responsavel')
+            'fields': ('nome', 'empresa', 'status', 'encarregado_responsavel', 'restaurante_vinculado', 'hotel_vinculado')
         }),
         ('Datas', {
             'fields': ('data_inicio', 'data_prevista_termino', 'data_real_termino')
