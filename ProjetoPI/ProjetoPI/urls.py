@@ -42,6 +42,7 @@ urlpatterns = [
     path('refeicoes/registros/', views.listar_registros, name='listar_registros'),
     path('refeicoes/editar/<str:registro_id>/', views.editar_registro, name='editar_registro'),
     path('refeicoes/excluir/<str:registro_id>/', views.excluir_registro, name='excluir_registro'),
+    path('dashboard/', views.relatorio, name='relatorio'),
 
     #path('editar-pedido/<str:pedido_id>/', views.editar_pedido, name='editar_pedido'),
     #path('excluir-pedido/<str:pedido_id>/', views.excluir_pedido, name='excluir_pedido'),    
