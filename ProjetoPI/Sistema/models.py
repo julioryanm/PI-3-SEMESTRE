@@ -136,6 +136,20 @@ class Obra(models.Model):
         blank=True, 
         related_name='obras'
     )
+    restaurante_vinculado = models.ForeignKey(
+        'Restaurante',
+        on_delete=models.CASCADE,
+        verbose_name="Restaurante vinculado",
+        null=True,
+        blank=True,
+    )
+    hotel_vinculado = models.ForeignKey(
+        'Hotel',
+        on_delete=models.CASCADE,
+        verbose_name="Hotel vinculado",
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = "Obra"
@@ -242,7 +256,8 @@ class Restaurante(models.Model):
         max_length=100,
         verbose_name="Responsável"
     )
-    
+    def __str__(self):
+        return self.nome
 
  
 class Hotel(models.Model):
@@ -272,6 +287,8 @@ class Hotel(models.Model):
         max_length=100,
         verbose_name="Responsável"
     )
+    def __str__(self):
+        return self.nome
 
 class RelatorioMensal(models.Model):
     """Modelo para relatórios mensais de refeições com detalhamento"""
