@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <title>Controle de Refeição Diária</title>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Ícone do usuário -->
+     <div class="logout-container">
+    <img src="{% static 'images/white version/user.png' %}" alt="error" height="65px" width="65px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+
+    <!-- Botão de sair abaixo do ícone -->
+    
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="sair-btn">
+          <img src="{% static 'images/logout.png' %}" alt="error" height="15px" width="15px">
+          Sair
+        </button>
+      </form>
+    </div>
+
+    <!-- Links do menu -->
+
+    <label>Navegeção</label>
+    <hr>
+    <a href="{% url 'home' %}">
+      <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      INICIO
+    </a>
+
+    <a href="{% url 'listar_pedidos' %}">
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      REFEIÇÕES
+    </a>
+
+    <a href="{% url 'listar-colaboradores' %}">
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      COLABORADORES
+    </a>
+
+    <a href="{% url 'listar-restaurantes' %}">
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      RESTAURANTES
+    </a>
+
+    <a href="{% url 'listar-obras' %}">
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      OBRAS
+    </a>
+
+    <a href="{% url 'listar-hoteis' %}">
+      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      HOTÉIS
+    </a>
+
+
+    <a href="{% url 'cadastrar_usuario' %}">
+      <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      USUÁRIOS
+    </a>
+
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      DASHBOARD
+    </a>
+  </div>
+
+  <div class="corpo">
+
+   <h>Dashboard de Refeições</h>
+
+<form method="GET" style="margin-bottom: 30px;">
+  <label>De: <input type="date" name="data_inicio" value="{{ request.GET.data_inicio }}"></label>
+  <label>Até: <input type="date" name="data_fim" value="{{ request.GET.data_fim }}"></label>
+
+  <label>Obra:
+    <select name="obra_id">
+      <option value="">Todas</option>
+      {% for obra in obras %}
+        <option value="{{ obra.obra_id }}" {% if request.GET.obra_id == obra.obra_id|stringformat:"s" %}selected{% endif %}>
+          {{ obra.obra_nome }}
+        </option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <label>Colaborador:
+    <select name="colaborador_id">
+      <option value="">Todos</option>
+      {% for col in colaboradores %}
+        <option value="{{ col.colaborador_id }}" {% if request.GET.colaborador_id == col.colaborador_id|stringformat:"s" %}selected{% endif %}>
+          {{ col.colaborador_nome }}
+        </option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <button type="submit">Filtrar</button>
+</form>
+
+<div class="dashboard-cards" style="display: flex; gap: 20px; margin-bottom: 40px;">
+  <div class="card" style="padding: 20px; background: #f0f0f0; border-radius: 10px; flex: 1;">
+    <h3>Total de Refeições</h3>
+    <p style="font-size: 2em;">{{ total_refeicoes }}</p>
+  </div>
+  <div class="card" style="padding: 20px; background: #f0f0f0; border-radius: 10px; flex: 1;">
+    <h3>Colaboradores Atendidos</h3>
+    <p style="font-size: 2em;">{{ total_colaboradores }}</p>
+  </div>
+  <div class="card" style="padding: 20px; background: #f0f0f0; border-radius: 10px; flex: 1;">
+    <h3>Valor Total das Refeições</h3>
+    <p style="font-size: 2em;">R$ {{ soma_valor_refeicoes|floatformat:2 }}</p>
+  </div>
+</div>
+
+<h2>Refeições por Dia</h2>
+<canvas id="graficoRefeicoes" width="1000" height="400"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('graficoRefeicoes').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: [
+        {% for d in refeicoes_por_dia %}
+          "{{ d.data_formatada }}"{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      ],
+      datasets: [{
+        label: 'Nº de Refeições',
+        data: [
+          {% for d in refeicoes_por_dia %}
+            {{ d.total }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        ],
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderRadius: 5
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1, // força números inteiros
+            callback: function(value) {
+              return Number.isInteger(value) ? value : null;
+            }
+          }
+        }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            title: function(context) {
+              return 'Data: ' + context[0].label;
+            },
+            label: function(context) {
+              return 'Refeições: ' + context.formattedValue;
+            }
+          }
+        }
+      }
+    }
+  });
+</script>
+
