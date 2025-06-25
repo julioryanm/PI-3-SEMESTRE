@@ -82,9 +82,12 @@ def editar_colaborador(request, id):
     else:
         form = ColaboradorForm(instance=colaborador)
     
+    obras = Obra.objects.all()  # <- Adicione isso aqui
+
     return render(request, 'editar-colaborador.html', {
         'form': form,
-        'colaborador': colaborador
+        'colaborador': colaborador,
+        'obras': obras
     })
 
 @login_required
