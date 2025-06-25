@@ -340,17 +340,6 @@ def detalhes_obra(request, id):
     obra = get_object_or_404(Obra, id=id)
     return render(request, 'detalhes-obra.html', {'obra': obra})
 
-    
-
-@login_required
-def relatorio(request):
-    return render (request, 'relatorio.html')
-
-@login_required
-def excluir_pedido(request, pedido_id):
-    pedido_model.excluir_pedido(pedido_id)
-    return redirect("listar_pedidos")
-
 @login_required
 def listar_pedidos(request):
     colaboradores = Colaborador.objects.all()
@@ -384,5 +373,23 @@ def excluir_registro(request, registro_id):
     pedido_model.excluir_registro(registro_id)
     return redirect('listar_registros')
 
+@login_required
+def relatorio(request):
+    filtros = {
+        "data_inicio": request.GET.get("data_inicio"),
+        "data_fim": request.GET.get("data_fim"),
+        "obra_id": request.GET.get("obra_id"),
+        "colaborador_id": request.GET.get("colaborador_id")
+    }
 
+    dados = {
+        "total_refeicoes": pedido_model.total_refeicoes(filtros),
+        "total_colaboradores": pedido_model.total_colaboradores_unicos(filtros),
+        "refeicoes_por_dia": pedido_model.refeicoes_por_dia(filtros),
+        "obras": pedido_model.listar_obras_unicas(),
+        "colaboradores": pedido_model.listar_colaboradores_unicos(),
+        "soma_valor_refeicoes": pedido_model.somar_valor_refeicoes(filtros)
+    }
+
+    return render(request, "dashboard.html", dados)
 
