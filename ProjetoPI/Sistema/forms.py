@@ -187,6 +187,11 @@ class ColaboradorForm(forms.ModelForm):
             'cpf': forms.TextInput(attrs={'placeholder': '000.000.000-00'}),
         }
     
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Garante que o campo 'obra' tenha todas as opções
+        self.fields['obra'].queryset = Obra.objects.all()
+
     def clean_cpf(self):
         cpf = self.cleaned_data.get('cpf')
         # Adicione aqui validações customizadas do CPF se necessário
