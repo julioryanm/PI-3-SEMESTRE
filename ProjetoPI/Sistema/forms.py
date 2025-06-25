@@ -18,7 +18,8 @@ class CadastroObraForm(forms.ModelForm):
             'nome', 'empresa', 'endereco', 
             'data_inicio', 'data_prevista_termino', 
             'data_real_termino', 'status', 'descricao',
-            'encarregado_responsavel'
+            'encarregado_responsavel', 'restaurante_vinculado',
+            'hotel_vinculado'
         ]
 
         widgets = {
