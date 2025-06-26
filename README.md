@@ -37,8 +37,8 @@ O sistema criado tem como principal objetivo controlar as refeições dos colabo
 
 ### 1. Clone o repositório
 ```bash
-git clone https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git
-cd SEU-REPOSITORIO
+git clone https://github.com/rayanneNunes/PI-3-SEMESTRE.git
+cd PI-3-SEMESTRE-main
 ```
 
 ### 2. Crie e ative o ambiente virtual
