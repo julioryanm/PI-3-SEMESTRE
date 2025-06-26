@@ -4,7 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <title>Controle de Refeição Diária</title>
+
+  <title>Refeições</title>
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
 </head>
 <body>
   <!-- Sidebar -->
@@ -12,7 +15,9 @@
     <!-- Ícone do usuário -->
     <div class="logout-container">
       <img src="{% static 'images/white version/user.png' %}" alt="error" height="65px" width="65px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+
       <!-- Botão de sair abaixo do ícone -->
+    
       <form method="POST" action="{% url 'logout' %}">
         {% csrf_token %}
         <button type="submit" class="sair-btn">
@@ -25,10 +30,10 @@
     <!-- Links do menu -->
     <label>Navegação</label>
     <hr>
-
     <a href="{% url 'home' %}">
       <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      INÍCIO
+      INICIO
+
     </a>
 
     {% if user.has_perm "Sistema.view_refeicao" %}
@@ -40,18 +45,28 @@
 
     {% if user.groups.filter(name='Administradores').exists %}
     <a href="{% url 'listar-colaboradores' %}">
-      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      COLABORADORES
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Colaboradores
+    </a>
+
+    <a href="{% url 'listar-restaurantes' %}">
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      RESTAURANTES
+    </a>
+
+    <a href="{% url 'listar-obras' %}">
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      OBRAS
     </a>
 
     <a href="{% url 'listar-hoteis' %}">
-      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      HOTÉIS
+      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Hotéis
     </a>
 
     <a href="{% url 'cadastrar_usuario' %}">
       <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      USUÁRIOS
+      Usuários
     </a>
 
     <a href="{% url 'relatorio' %}">
@@ -77,30 +92,34 @@
 
   <!-- Conteúdo principal -->
   <div class="corpo">
-    <h>Registros de Refeições</h>
+
+   <h>
+    <img src="{% static 'images/blue version/lunch-box.png' %}" alt="Logo" height="55" width="55"
+             style="margin-right: 15px;">
+    Registros de Refeições</h>
 
     {% if user.has_perm "Sistema.add_refeicao" %}
       <a href="{% url 'cadastrar-refeicao' %}" class="btn btn-primary" style="margin-bottom: 15px; display: inline-block;">Nova Refeição</a>
     {% endif %}
 
-    <table class="styled-table">
-      <thead>
-        <tr>
-          <th>Colaborador</th>
-          <th>Obra</th>
-          <th>Data</th>
-          <th>Valor</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for r in registros %}
-        <tr>
-          <td>{{ r.colaborador_nome }}</td>
-          <td>{{ r.obra_nome }}</td>
-          <td>{{ r.data_refeicao|date:"d/m/Y" }}</td>
-          <td>R$ {{ r.valor_refeicao }}</td>
-          <td>
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Colaborador</th>
+      <th>Obra</th>
+      <th>Data</th>
+      <th>Valor</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in registros %}
+    <tr>
+      <td>{{ r.colaborador_nome }}</td>
+      <td>{{ r.obra_nome }}</td>
+      <td>{{ r.data_refeicao|date:"d/m/Y" }}</td>
+      <td>R$ {{ r.valor_refeicao }}</td>
+      <td>
             {% if user.has_perm "Sistema.change_refeicao" %}
               <a href="{% url 'editar_registro' r.id %}">Editar</a>
             {% endif %}
@@ -115,7 +134,25 @@
         <tr><td colspan="5">Nenhum registro encontrado.</td></tr>
         {% endfor %}
       </tbody>
-    </table>
-  </div>
+</div>
+
+  <div class="pagination" style="margin-top: 20px;">
+  <span>
+    {% if page_obj.has_previous %}
+      <a href="?page=1">&laquo; Primeira</a>
+      <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+    {% endif %}
+
+    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}">Próxima</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+    {% endif %}
+  </span>
+</div>
+
+
+
 </body>
 </html>

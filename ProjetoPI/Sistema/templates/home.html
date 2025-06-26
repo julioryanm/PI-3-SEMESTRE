@@ -13,7 +13,7 @@
   <div class="sidebar">
     <!-- Ícone do usuário -->
      <div class="logout-container">
-    <img src="{% static 'images/white version/user.png' %}" alt="error" height="65px" width="65px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+    <img src="{% static 'images/white version/user.png' %}" alt="error" height="75px" width="75px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
 
     <!-- Botão de sair abaixo do ícone -->
     
@@ -30,9 +30,9 @@
 
     <label>Navegeção</label>
     <hr>
-    <a href="{% url 'home' %}">
-      <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      INICIO
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Dashboard
     </a>
 
     {% if user.has_perm "Sistema.view_refeicao" %}
@@ -44,27 +44,27 @@
 
     {% if user.groups.filter(name='Administradores').exists %}
     <a href="{% url 'listar-colaboradores' %}">
-      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      COLABORADORES
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Colaboradores
     </a>
     {% endif %}
 
     <a href="{% url 'listar-restaurantes' %}">
-      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      RESTAURANTES
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Restaurantes
     </a>
 
     {% if user.has_perm "Sistema.view_obra" %}
     <a href="{% url 'listar-obras' %}">
-      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      OBRAS
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Obras
     </a>
     {% endif %}
 
     {% if user.groups.filter(name='Administradores').exists %}
     <a href="{% url 'listar-hoteis' %}">
-      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      HOTÉIS
+      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Hotéis
     </a>
     {% endif %}
 
@@ -72,7 +72,7 @@
     {% if user.groups.filter(name='Administradores').exists %}
     <a href="{% url 'cadastrar_usuario' %}">
       <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      USUÁRIOS
+      Usuários
     </a>
     {% endif %}
 
