@@ -5,6 +5,8 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <title>Colaboradores</title>
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
 </head>
 
 <body>
@@ -13,7 +15,7 @@
   <div class="sidebar">
     <!-- Ícone do usuário -->
      <div class="logout-container">
-    <img src="{% static 'images/white version/user.png' %}" alt="error" height="65px" width="65px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+    <img src="{% static 'images/white version/user.png' %}" alt="error" height="75px" width="75px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
 
     <!-- Botão de sair abaixo do ícone -->
     
@@ -30,40 +32,43 @@
 
     <label>Navegeção</label>
     <hr>
-    <a href="{% url 'home' %}">
-      <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      INICIO
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Dashboard
     </a>
 
-    <a href="{% url 'listar-colaboradores' %}"class="active">
-      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      COLABORADORES
+     <a href="{% url 'listar_pedidos' %}">
+      <img src="{% static 'images/white version/alim.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Refeições
+    </a>
+
+    <a href="{% url 'listar-colaboradores' %}" class="active">
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Colaboradores
     </a>
 
     <a href="{% url 'listar-restaurantes' %}">
-      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      RESTAURANTES
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Restaurantes
     </a>
 
     <a href="{% url 'listar-obras' %}">
-      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      OBRAS
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Obras
     </a>
 
     <a href="{% url 'listar-hoteis' %}">
-      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      HOTÉIS
+      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Hotéis
     </a>
+
 
     <a href="{% url 'cadastrar_usuario' %}">
       <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      USUÁRIOS
+      Usuários
     </a>
 
-    <a href="{% url 'relatorio' %}">
-      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      DASHBOARD
-    </a>
+    
   </div>
 
   <!-- Conteúdo principal -->
