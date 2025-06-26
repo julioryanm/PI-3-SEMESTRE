@@ -19,6 +19,9 @@ from django.apps import apps
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from Sistema.utils.mongo.mongo_model import ControleRefeicoes
 from bson import ObjectId
+from datetime import datetime
+from django.contrib import messages
+from django.core.paginator import Paginator
 
 pedido_model = ControleRefeicoes()
 
@@ -360,7 +363,11 @@ def cadastrar_pedido(request):
 @login_required
 def listar_registros(request):
     registros = pedido_model.listar_registros()
-    return render(request, 'listar-registros.html', {'registros': registros})
+
+    paginator = Paginator(registros, 100)  # 100 registros por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'listar-registros.html', {'registros': page_obj, 'page_obj': page_obj})
 
 @login_required
 def editar_registro(request, registro_id):
@@ -385,14 +392,53 @@ def relatorio(request):
         "colaborador_id": request.GET.get("colaborador_id")
     }
 
-    dados = {
-        "total_refeicoes": pedido_model.total_refeicoes(filtros),
-        "total_colaboradores": pedido_model.total_colaboradores_unicos(filtros),
-        "refeicoes_por_dia": pedido_model.refeicoes_por_dia(filtros),
-        "obras": pedido_model.listar_obras_unicas(),
-        "colaboradores": pedido_model.listar_colaboradores_unicos(),
-        "soma_valor_refeicoes": pedido_model.somar_valor_refeicoes(filtros)
-    }
+    filtros_aplicados = any([filtros["data_inicio"], filtros["data_fim"], filtros["obra_id"], filtros["colaborador_id"]])
+
+    if filtros_aplicados:
+        # Validação de intervalo
+        try:
+            data_inicio = datetime.strptime(filtros["data_inicio"], "%Y-%m-%d")
+            data_fim = datetime.strptime(filtros["data_fim"], "%Y-%m-%d")
+
+            if (data_fim - data_inicio).days > 31:
+                messages.error(request, "O intervalo de datas não pode ultrapassar 31 dias.")
+                return render(request, "dashboard.html", {
+                    "obras": pedido_model.listar_obras_unicas(),
+                    "colaboradores": pedido_model.listar_colaboradores_unicos(),
+                    "total_refeicoes": 0,
+                    "total_colaboradores": 0,
+                    "refeicoes_por_dia": [],
+                    "soma_valor_refeicoes": 0,
+                })
+        except (ValueError, TypeError):
+            messages.error(request, "Datas inválidas.")
+            # mesmo retorno acima em caso de erro
+            return render(request, "dashboard.html", {
+                "obras": pedido_model.listar_obras_unicas(),
+                "colaboradores": pedido_model.listar_colaboradores_unicos(),
+                "total_refeicoes": 0,
+                "total_colaboradores": 0,
+                "refeicoes_por_dia": [],
+                "soma_valor_refeicoes": 0,
+            })
+
+        # Se intervalo válido:
+        dados = {
+            "total_refeicoes": pedido_model.total_refeicoes(filtros),
+            "total_colaboradores": pedido_model.total_colaboradores_unicos(filtros),
+            "refeicoes_por_dia": pedido_model.refeicoes_por_dia(filtros),
+            "soma_valor_refeicoes": pedido_model.somar_valor_refeicoes(filtros),
+        }
+    else:
+        dados = {
+            "total_refeicoes": 0,
+            "total_colaboradores": 0,
+            "refeicoes_por_dia": [],
+            "soma_valor_refeicoes": 0,
+        }
+
+    dados["obras"] = pedido_model.listar_obras_unicas()
+    dados["colaboradores"] = pedido_model.listar_colaboradores_unicos()
 
     return render(request, "dashboard.html", dados)
 
