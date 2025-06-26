@@ -25,62 +25,65 @@
         </form>
       </div>
 
-    <!-- Links do menu -->
-
-    <label>Navegeção</label>
-    <hr>
-    <a href="{% url 'relatorio' %}">
-      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
-      Dashboard
+      <!-- Links do menu -->
+      <label>Navegação</label>
+      <hr>
+      <a href="{% url 'home' %}">
+      <img src="{% static 'images/white version/inicio.png' %}" height="20" width="20"> Início
     </a>
 
-     <a href="{% url 'listar_registros' %}">
-      <img src="{% static 'images/white version/alim.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
-      Refeições
+    {% if pode_ver_refeicoes %}
+    <a href="{% url 'listar_pedidos' %}">
+      <img src="{% static 'images/white version/func.png' %}" height="20" width="20"> Refeições
     </a>
+    {% endif %}
 
-      {% if user.groups.filter(name='Administradores').exists %}
-      <a href="{% url 'listar-colaboradores' %}">
-        <img src="{% static 'images/white version/func.png' %}" height="20" width="20" style="margin-right: 10px;"> COLABORADORES
-      </a>
-      {% endif %}
+    {% if pode_ver_colaboradores %}
+    <a href="{% url 'listar-colaboradores' %}">
+      <img src="{% static 'images/white version/func.png' %}" height="20" width="20"> Colaboradores
+    </a>
+    {% endif %}
 
-      {% if user.has_perm "Sistema.view_restaurante" %}
+    {% if pode_ver_restaurantes %}
       <a href="{% url 'listar-restaurantes' %}">
-        <img src="{% static 'images/white version/rest.png' %}" height="20" width="20" style="margin-right: 10px;"> RESTAURANTES
+        <img src="{% static 'images/white version/rest.png' %}" height="20" width="20"> Restaurantes
       </a>
-      {% endif %}
+    {% endif %}
 
-      {% if user.has_perm "Sistema.view_obra" %}
-      <a href="{% url 'listar-obras' %}" class="active">
-        <img src="{% static 'images/white version/obra.png' %}" height="20" width="20" style="margin-right: 10px;"> OBRAS
-      </a>
-      {% endif %}
+    {% if pode_ver_obras %}
+    <a href="{% url 'listar-obras' %}">
+      <img src="{% static 'images/white version/obra.png' %}" height="20" width="20"> Obras
+    </a>
+    {% endif %}
 
-      {% if user.groups.filter(name='Administradores').exists %}
-      <a href="{% url 'listar-hoteis' %}">
-        <img src="{% static 'images/white version/hotel.png' %}" height="20" width="20" style="margin-right: 10px;"> HOTÉIS
-      </a>
+     {% if pode_ver_hoteis %}
+    <a href="{% url 'listar-hoteis' %}">
+      <img src="{% static 'images/white version/hotel.png' %}" height="20" width="20"> Hotéis
+    </a>
+    {% endif %}
 
-      <a href="{% url 'cadastrar_usuario' %}">
-        <img src="{% static 'images/white version/usuario.png' %}" height="20" width="20" style="margin-right: 10px;"> USUÁRIOS
-      </a>
+    {% if pode_ver_usuarios %}
+    <a href="{% url 'cadastrar_usuario' %}">
+      <img src="{% static 'images/white version/usuario.png' %}" height="20" width="20"> Usuários
+    </a>
+    {% endif %}
 
-      <a href="{% url 'relatorio' %}">
-        <img src="{% static 'images/white version/dash.png' %}" height="20" width="20" style="margin-right: 10px;"> DASHBOARD
-      </a>
-      {% endif %}
-    </div>
+    {% if pode_ver_dashboard %}
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'images/white version/dash.png' %}" height="20" width="20"> Dashboard
+    </a>
+    {% endif %}
+
+  </div>
 
     <!-- Conteúdo principal -->
     <div class="corpo">
       <h>
         <img src="{% static 'images/blue version/sketching.png' %}" alt="Logo" height="55" width="55" style="margin-right: 15px;">
-        Obras Cadastradas</h>
+        Obras Cadastradas
+      </h>
 
-      {% if user.has_perm "Sistema.add_obra" %}
-
-
+      {% if pode_adicionar_obra %}
       <div class="right-buttons">
         <a href="{% url 'cadastrar-obra' %}" class="blue-button">
           <img src="{% static 'images/white version/plus.png' %}" height="15" width="15" style="margin-right: 5px;"> Adicionar
@@ -88,7 +91,7 @@
       </div>
       {% endif %}
 
-      {% if user.has_perm "Sistema.delete_obra" %}
+      {% if pode_deletar_obra %}
       <form method="POST" action="{% url 'deletar-generico' %}">
         {% csrf_token %}
         <input type="hidden" name="model" value="Obra">
@@ -99,7 +102,7 @@
         {% for obra in obras %}
         <div class="card" style="border: 1px solid #ccc; border-radius: 8px; padding: 18px; background: white;">
           
-          {% if user.has_perm "Sistema.delete_obra" %}
+          {% if pode_deletar_obra %}
           <input type="checkbox" name="ids" value="{{ obra.id }}" style="margin-bottom: 8px;">
           {% endif %}
 
@@ -126,9 +129,26 @@
                 <li>Sem colaboradores vinculados</li>
               {% endfor %}
             </ul>
+            <p><strong>Hotel:</strong></p>
+            <ul>
+              {% if obra.hotel_vinculado %}
+                <li>{{ obra.hotel_vinculado.nome }}</li>
+              {% else %}
+                <li>Sem hotel vinculado</li>
+              {% endif %}
+            </ul>
+            <p><strong>Restaurante:</strong></p>
+            <ul>
+              {% if obra.restaurante_vinculado %}
+                <li>{{ obra.restaurante_vinculado.nome }}</li>
+              {% else %}
+                <li>Sem restaurante vinculado</li>
+              {% endif %}
+            </ul>
           </div>
+          
 
-          {% if user.has_perm "Sistema.change_obra" %}
+          {% if pode_editar_obra %}
           <a href="{% url 'editar-obra' obra.id %}" title="Editar">
             <img src="{% static 'images/white version/pencil.png' %}" height="20" width="20" style="border: 4px solid #004aad; border-radius: 5px; padding: 3px; background-color: #004aad;">
           </a>
@@ -139,7 +159,7 @@
         {% endfor %}
       </div>
 
-      {% if user.has_perm "Sistema.delete_obra" %}
+      {% if pode_deletar_obra %}
       <div style="margin-top: 20px;">
         <button type="submit" class="blue-button" onclick="return confirm('Tem certeza que deseja deletar os itens selecionados?')">
           <img src="{% static 'images/white version/trash.png' %}" height="15" width="15" style="margin-right: 5px;"> Excluir
@@ -147,7 +167,6 @@
       </div>
       </form>
       {% endif %}
-
     </div>
   </div>
 

@@ -321,12 +321,26 @@ def cadastro_obras(request):
 
 @login_required
 def listar_obras(request):
-    if request.user.groups.filter(name='Encarregados').exists():
-        obras = Obra.objects.filter(encarregado_responsavel=request.user)
+    user = request.user
+
+    if user.groups.filter(name='Encarregados').exists():
+        obras = Obra.objects.filter(encarregado_responsavel=user)
     else:
         obras = Obra.objects.all()
-    return render(request, 'lista-obras.html', {'obras': obras})
 
+    context = {
+        'obras': obras,
+        'pode_ver_colaboradores': user.groups.filter(name='Administradores').exists() or user.is_superuser,
+        'pode_ver_restaurantes': user.has_perm('Sistema.view_restaurante') or user.is_superuser,
+        'pode_ver_obras': user.has_perm('Sistema.view_obra') or user.is_superuser,
+        'pode_adicionar_obra': user.has_perm('Sistema.add_obra') or user.is_superuser,
+        'pode_editar_obra': user.has_perm('Sistema.change_obra') or user.is_superuser,
+        'pode_deletar_obra': user.has_perm('Sistema.delete_obra') or user.is_superuser,
+        'pode_ver_usuarios': user.groups.filter(name='Administradores').exists() or user.is_superuser,
+        'pode_ver_dashboard': user.groups.filter(name='Administradores').exists() or user.is_superuser,
+    }
+
+    return render(request, 'lista-obras.html', context)
 
 @login_required
 def editar_obra(request, id):
@@ -452,3 +466,20 @@ def relatorio(request):
 
     return render(request, "dashboard.html", dados)
 
+@login_required
+def home(request):
+    user = request.user
+
+    context = {
+        'pode_ver_refeicoes': user.has_perm('Sistema.view_refeicao') or user.is_superuser,
+        'pode_ver_obras': user.has_perm('Sistema.view_obra') or user.is_superuser,
+        'pode_ver_dashboard': user.groups.filter(name='Administradores').exists() or user.is_superuser,
+        'pode_ver_usuarios': user.groups.filter(name='Administradores').exists() or user.is_superuser,
+        'pode_ver_colaboradores': user.groups.filter(name='Administradores').exists() or user.is_superuser,
+        'pode_ver_restaurantes': user.has_perm('Sistema.view_restaurante') or user.is_superuser,
+        'pode_ver_hoteis': user.groups.filter(name='Administradores').exists() or user.is_superuser,
+        'grupo_nome': user.groups.first().name.upper() if user.groups.exists() else 'SUPERUSER',
+        'username_maiusculo': user.username.upper()
+    }
+
+    return render(request, 'home.html', context)

@@ -23,12 +23,12 @@ def permissoes_grupo(sender, **kwargs):
         codename__in=["add_user", "change_user", "delete_user"]
     )
    
+class PermissaoVirtual(models.Model):
+    nome = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.nome
 
-'''@receiver(post_save, sender=User)
-def criar_profile_automanticamente(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)'''
 
 class EmpresaParceira(models.Model):
     """Modelo para empresas parceiras com validações aprimoradas"""
@@ -364,4 +364,6 @@ class Profile(models.Model):
 
     def __str__(self):
         return f'{self.user.username} ({self.get_tipo_display()})'
+    
+
  
