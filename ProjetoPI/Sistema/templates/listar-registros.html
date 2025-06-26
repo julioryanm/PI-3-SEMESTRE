@@ -36,14 +36,14 @@
     </a>
 
     {# Mostrar "Refeições" para Encarregados, Administradores e superusers #}
-    {% if user.groups.filter(name='Encarregados').exists or user.groups.filter(name='Administradores').exists or user.is_superuser %}
+    {% if is_encarregado or is_administrador or is_superuser %}
     <a href="{% url 'listar_pedidos' %}">
       <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       REFEIÇÕES
     </a>
     {% endif %}
 
-    {% if user.groups.filter(name='Administradores').exists or user.is_superuser %}
+    {% if is_administrador or is_superuser %}
     <a href="{% url 'listar-colaboradores' %}">
       <img src="{% static 'images/white version/func.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
       Colaboradores
@@ -76,7 +76,7 @@
     {% endif %}
 
     {# Restaurantes também podem ser vistos pelos que tem permissão #}
-    {% if user.has_perm "Sistema.view_restaurante" %}
+    {% if is_administrador or is_superuser %}
     <a href="{% url 'listar-restaurantes' %}">
       <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       RESTAURANTES
@@ -84,7 +84,7 @@
     {% endif %}
 
     {# Obras visíveis para quem tem permissão #}
-    {% if user.has_perm "Sistema.view_obra" %}
+    {% if is_encarregado or is_administrador or is_superuser %}
     <a href="{% url 'listar-obras' %}">
       <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       OBRAS
@@ -100,7 +100,7 @@
              style="margin-right: 15px;">
     Registros de Refeições</h>
 
-    {% if user.has_perm "Sistema.add_refeicao" %}
+   {% if is_encarregado or is_administrador or is_superuser %}
       <a href="{% url 'cadastrar-refeicao' %}" class="btn btn-primary" style="margin-bottom: 15px; display: inline-block;">Nova Refeição</a>
     {% endif %}
 
@@ -123,13 +123,13 @@
       <td>R$ {{ r.valor_refeicao }}</td>
       <td>
             {# Editar para todos que tem acesso (Encarregados, Admin, Superuser) #}
-            {% if user.groups.filter(name='Encarregados').exists or user.groups.filter(name='Administradores').exists or user.is_superuser %}
+            {% if is_encarregado or is_administrador or is_superuser %}
               <a href="{% url 'editar_registro' r.id %}">Editar</a>
             {% endif %}
             
             {# Excluir só para Admins e Superusers #}
-            {% if user.groups.filter(name='Administradores').exists or user.is_superuser %}
-              {% if user.groups.filter(name='Encarregados').exists %}|{% endif %}
+            {% if is_administrador or is_superuser %}
+        
               <a href="{% url 'excluir_registro' r.id %}" onclick="return confirm('Deseja excluir?');">Excluir</a>
             {% endif %}
           </td>
