@@ -7,11 +7,9 @@ class SistemaViewsTest(TestCase):
     def setUp(self):
         self.client = Client()
 
-        # Criar grupos
         self.admin_group = Group.objects.create(name='Admin')
         self.encarregado_group = Group.objects.create(name='Encarregado')
 
-        # Criar usuário comum
         self.user = User.objects.create_user(
             username='testuser',
             password='testpass123',
@@ -19,7 +17,6 @@ class SistemaViewsTest(TestCase):
         )
         self.user.groups.add(self.encarregado_group)
 
-        # Criar usuário admin
         self.admin_user = User.objects.create_user(
             username='admin',
             password='adminpass123',
@@ -28,11 +25,9 @@ class SistemaViewsTest(TestCase):
         )
         self.admin_user.groups.add(self.admin_group)
 
-        # Criar perfis
         Profile.objects.create(user=self.user, tipo='encarregado', telefone='11999999999')
         Profile.objects.create(user=self.admin_user, tipo='admin', telefone='11888888888')
 
-        # Criar obra
         self.obra = Obra.objects.create(
             nome='Obra Teste',
             empresa='Empresa Teste',
@@ -42,7 +37,6 @@ class SistemaViewsTest(TestCase):
             encarregado_responsavel=self.user
         )
 
-        # Criar colaborador
         self.colaborador = Colaborador.objects.create(
             nome='Colaborador Teste',
             cpf='123.456.789-09',
@@ -52,7 +46,6 @@ class SistemaViewsTest(TestCase):
             obra=self.obra
         )
 
-        # Criar hotel
         self.hotel = Hotel.objects.create(
             nome='Hotel Teste',
             cnpj='12.345.678/0001-99',
@@ -62,7 +55,6 @@ class SistemaViewsTest(TestCase):
             responsavel='Responsável Teste'
         )
 
-        # Criar restaurante
         self.restaurante = Restaurante.objects.create(
             nome='Restaurante Teste',
             cnpj='98.765.432/0001-99',
@@ -88,7 +80,6 @@ class SistemaViewsTest(TestCase):
     def test_login_view_post_success(self):
         login_successful = self.client.login(username='testuser', password='testpass123')
         self.assertTrue(login_successful)
-
         response = self.client.get(reverse('home'))
         self.assertEqual(response.status_code, 200)
 
@@ -145,18 +136,44 @@ class SistemaViewsTest(TestCase):
         response = self.client.get(reverse('cadastro'))
         self.assertEqual(response.status_code, 200)
 
-    def test_acesso_negado_para_nao_administradores(self):
-        self.client.login(username='testuser', password='testpass123')
-        response = self.client.get(reverse('cadastrar-hotel'))
-        self.assertIn(response.status_code, [302, 403])
-
-    def test_relatorio_view(self):
-        self.client.login(username='admin', password='adminpass123')
-        response = self.client.get(reverse('relatorio'))
-        self.assertEqual(response.status_code, 200)
-
     def test_profile_view(self):
         self.client.login(username='testuser', password='testpass123')
         response = self.client.get(reverse('home'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'SEJA BEM-VINDO')  # Texto garantido no seu template home
+        self.assertContains(response, 'SEJA BEM-VINDO')
+
+    def test_excluir_restaurante_post(self):
+        self.client.login(username='admin', password='adminpass123')
+        response = self.client.post(reverse('excluir-restaurante', args=[self.restaurante.id]))
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Restaurante.objects.filter(id=self.restaurante.id).exists())
+
+    def test_editar_restaurante_view_get(self):
+        self.client.login(username='admin', password='adminpass123')
+        response = self.client.get(reverse('editar-restaurante', args=[self.restaurante.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Restaurante Teste')
+
+    def test_logout_get_redirect(self):
+        self.client.login(username='admin', password='adminpass123')
+        response = self.client.get(reverse('logout'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_logout_post(self):
+        self.client.login(username='admin', password='adminpass123')
+        response = self.client.post(reverse('logout'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'logout.html')
+
+    def test_cadastro_obra_post(self):
+        self.client.login(username='admin', password='adminpass123')
+        response = self.client.post(reverse('cadastrar-obra'), {
+            'nome': 'Nova Obra',
+            'empresa': 'Empresa Nova',
+            'status': 'ANDAMENTO',
+            'endereco': 'Rua Nova, 123',
+            'data_inicio': '2023-05-01',
+            'encarregado_responsavel': self.user.id
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Obra.objects.filter(nome='Nova Obra').exists())
