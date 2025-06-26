@@ -4,9 +4,16 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <title>Controle de Refeição Diária</title>
+  <title>Dashboard</title>
 </head>
 <body>
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li style="color: red;">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
   <!-- Sidebar -->
   <div class="sidebar">
     <!-- Ícone do usuário -->
@@ -103,71 +110,72 @@
   <button type="submit">Filtrar</button>
 </form>
 
-<div class="dashboard-cards" style="display: flex; gap: 20px; margin-bottom: 40px;">
-  <div class="card" style="padding: 20px; background: #f0f0f0; border-radius: 10px; flex: 1;">
-    <h3>Total de Refeições</h3>
-    <p style="font-size: 2em;">{{ total_refeicoes }}</p>
+{% if refeicoes_por_dia %}
+  <div class="dashboard-cards" style="display: flex; gap: 20px; margin-bottom: 40px;">
+    <div class="card" style="padding: 20px; background: #f0f0f0; border-radius: 10px; flex: 1;">
+      <h3>Total de Refeições</h3>
+      <p style="font-size: 2em;">{{ total_refeicoes }}</p>
+    </div>
+    <div class="card" style="padding: 20px; background: #f0f0f0; border-radius: 10px; flex: 1;">
+      <h3>Colaboradores Atendidos</h3>
+      <p style="font-size: 2em;">{{ total_colaboradores }}</p>
+    </div>
+    <div class="card" style="padding: 20px; background: #f0f0f0; border-radius: 10px; flex: 1;">
+      <h3>Valor Total das Refeições</h3>
+      <p style="font-size: 2em;">R$ {{ soma_valor_refeicoes|floatformat:2 }}</p>
+    </div>
   </div>
-  <div class="card" style="padding: 20px; background: #f0f0f0; border-radius: 10px; flex: 1;">
-    <h3>Colaboradores Atendidos</h3>
-    <p style="font-size: 2em;">{{ total_colaboradores }}</p>
-  </div>
-  <div class="card" style="padding: 20px; background: #f0f0f0; border-radius: 10px; flex: 1;">
-    <h3>Valor Total das Refeições</h3>
-    <p style="font-size: 2em;">R$ {{ soma_valor_refeicoes|floatformat:2 }}</p>
-  </div>
-</div>
 
-<h2>Refeições por Dia</h2>
-<canvas id="graficoRefeicoes" width="1000" height="400"></canvas>
+  <h2>Refeições por Dia</h2>
+  <canvas id="graficoRefeicoes" width="1000" height="400"></canvas>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  const ctx = document.getElementById('graficoRefeicoes').getContext('2d');
-  const chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: [
-        {% for d in refeicoes_por_dia %}
-          "{{ d.data_formatada }}"{% if not forloop.last %}, {% endif %}
-        {% endfor %}
-      ],
-      datasets: [{
-        label: 'Nº de Refeições',
-        data: [
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('graficoRefeicoes').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [
           {% for d in refeicoes_por_dia %}
-            {{ d.total }}{% if not forloop.last %}, {% endif %}
+            "{{ d.data_formatada }}"{% if not forloop.last %}, {% endif %}
           {% endfor %}
         ],
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-        borderRadius: 5
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            stepSize: 1, // força números inteiros
-            callback: function(value) {
-              return Number.isInteger(value) ? value : null;
+        datasets: [{
+          label: 'Nº de Refeições',
+          data: [
+            {% for d in refeicoes_por_dia %}
+              {{ d.total }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          ],
+          backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          borderRadius: 5
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1,
+              callback: function(value) {
+                return Number.isInteger(value) ? value : null;
+              }
             }
           }
-        }
-      },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            title: function(context) {
-              return 'Data: ' + context[0].label;
-            },
-            label: function(context) {
-              return 'Refeições: ' + context.formattedValue;
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              title: function(context) {
+                return 'Data: ' + context[0].label;
+              },
+              label: function(context) {
+                return 'Refeições: ' + context.formattedValue;
+              }
             }
           }
         }
       }
-    }
-  });
-</script>
-
+    });
+  </script>
+{% endif %}
