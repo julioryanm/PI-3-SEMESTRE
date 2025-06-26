@@ -10,11 +10,9 @@
   <!-- Sidebar -->
   <div class="sidebar">
     <!-- Ícone do usuário -->
-     <div class="logout-container">
-    <img src="{% static 'images/white version/user.png' %}" alt="error" height="65px" width="65px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
-
-    <!-- Botão de sair abaixo do ícone -->
-    
+    <div class="logout-container">
+      <img src="{% static 'images/white version/user.png' %}" alt="error" height="65px" width="65px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+      <!-- Botão de sair abaixo do ícone -->
       <form method="POST" action="{% url 'logout' %}">
         {% csrf_token %}
         <button type="submit" class="sair-btn">
@@ -25,39 +23,31 @@
     </div>
 
     <!-- Links do menu -->
-
-    <label>Navegeção</label>
+    <label>Navegação</label>
     <hr>
+
     <a href="{% url 'home' %}">
       <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      INICIO
+      INÍCIO
     </a>
 
+    {% if user.has_perm "Sistema.view_refeicao" %}
     <a href="{% url 'listar_pedidos' %}">
       <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       REFEIÇÕES
     </a>
+    {% endif %}
 
+    {% if user.groups.filter(name='Administradores').exists %}
     <a href="{% url 'listar-colaboradores' %}">
       <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       COLABORADORES
-    </a>
-
-    <a href="{% url 'listar-restaurantes' %}">
-      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      RESTAURANTES
-    </a>
-
-    <a href="{% url 'listar-obras' %}">
-      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      OBRAS
     </a>
 
     <a href="{% url 'listar-hoteis' %}">
       <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       HOTÉIS
     </a>
-
 
     <a href="{% url 'cadastrar_usuario' %}">
       <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
@@ -68,37 +58,64 @@
       <img src="{% static 'images/white version/dash.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       DASHBOARD
     </a>
+    {% endif %}
+
+    {% if user.has_perm "Sistema.view_restaurante" %}
+    <a href="{% url 'listar-restaurantes' %}">
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      RESTAURANTES
+    </a>
+    {% endif %}
+
+    {% if user.has_perm "Sistema.view_obra" %}
+    <a href="{% url 'listar-obras' %}">
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      OBRAS
+    </a>
+    {% endif %}
   </div>
 
+  <!-- Conteúdo principal -->
   <div class="corpo">
-   <h>Registros de Refeições</h>
+    <h>Registros de Refeições</h>
 
-<table class="styled-table">
-  <thead>
-    <tr>
-      <th>Colaborador</th>
-      <th>Obra</th>
-      <th>Data</th>
-      <th>Valor</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for r in registros %}
-    <tr>
-      <td>{{ r.colaborador_nome }}</td>
-      <td>{{ r.obra_nome }}</td>
-      <td>{{ r.data_refeicao|date:"d/m/Y" }}</td>
-      <td>R$ {{ r.valor_refeicao }}</td>
-      <td>
-        <a href="{% url 'editar_registro' r.id %}">Editar</a> |
-        <a href="{% url 'excluir_registro' r.id %}" onclick="return confirm('Deseja excluir?');">Excluir</a>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    {% if user.has_perm "Sistema.add_refeicao" %}
+      <a href="{% url 'cadastrar-refeicao' %}" class="btn btn-primary" style="margin-bottom: 15px; display: inline-block;">Nova Refeição</a>
+    {% endif %}
 
-
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>Colaborador</th>
+          <th>Obra</th>
+          <th>Data</th>
+          <th>Valor</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in registros %}
+        <tr>
+          <td>{{ r.colaborador_nome }}</td>
+          <td>{{ r.obra_nome }}</td>
+          <td>{{ r.data_refeicao|date:"d/m/Y" }}</td>
+          <td>R$ {{ r.valor_refeicao }}</td>
+          <td>
+            {% if user.has_perm "Sistema.change_refeicao" %}
+              <a href="{% url 'editar_registro' r.id %}">Editar</a>
+            {% endif %}
+            
+            {% if user.has_perm "Sistema.delete_refeicao" %}
+              {% if user.has_perm "Sistema.change_refeicao" %}|{% endif %}
+              <a href="{% url 'excluir_registro' r.id %}" onclick="return confirm('Deseja excluir?');">Excluir</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">Nenhum registro encontrado.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>

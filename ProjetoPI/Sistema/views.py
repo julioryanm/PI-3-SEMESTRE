@@ -19,6 +19,7 @@ from django.apps import apps
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from Sistema.utils.mongo.mongo_model import ControleRefeicoes
 from bson import ObjectId
+from django.contrib.auth.decorators import permission_required
 
 pedido_model = ControleRefeicoes()
 
@@ -317,10 +318,11 @@ def cadastro_obras(request):
 
 @login_required
 def listar_obras(request):
-    obras = Obra.objects.all()
-    context = {'obras': obras}
-    return render (request, 'lista-obras.html', context)
-
+    if request.user.groups.filter(name='Encarregados').exists():
+        obras = Obra.objects.filter(encarregado_responsavel=request.user)
+    else:
+        obras = Obra.objects.all()
+    return render(request, 'lista-obras.html', {'obras': obras})
 
 
 @login_required
@@ -343,12 +345,17 @@ def detalhes_obra(request, id):
     obra = get_object_or_404(Obra, id=id)
     return render(request, 'detalhes-obra.html', {'obra': obra})
 
+
 @login_required
+@permission_required('Sistema.view_refeicao', raise_exception=True)
 def listar_pedidos(request):
     colaboradores = Colaborador.objects.all()
     return render(request, 'listar-pedidos.html', {'colaboradores': colaboradores})
 
+
+# Manda Mongo
 @login_required
+@permission_required('Sistema.add_refeicao', raise_exception=True)
 def cadastrar_pedido(request):
     if request.method == "POST":
         data = request.POST.get("data")
@@ -357,7 +364,10 @@ def cadastrar_pedido(request):
         return redirect("listar_pedidos")
     return redirect("listar_pedidos")
 
+
+# Lista todas as refeicoes cadastradas Mongo 
 @login_required
+@permission_required('Sistema.view_refeicao', raise_exception=True)
 def listar_registros(request):
     registros = pedido_model.listar_registros()
     return render(request, 'listar-registros.html', {'registros': registros})

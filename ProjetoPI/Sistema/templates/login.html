@@ -3,69 +3,253 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #f0f2f5;
+    }
+
+    .container-login {
+      display: flex;
+      height: 100vh;
+      width: 100%;
+      flex-direction: row;
+    }
+
+    .left-panel {
+      flex: 0.4;
+      background: linear-gradient(160deg, #004aad 0%, #005fe6 100%);
+      color: white;
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-login {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 360px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card-login h2 {
+      color: #004aad;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .input-group {
+      position: relative;
+      width: 100%;
+      transition: 0.3s;
+    }
+
+    .input-group img {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .input-group input {
+      padding: 10px 10px 10px 40px;
+      width: 100%;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      transition: box-shadow 0.3s;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0, 74, 173, 0.2);
+    }
+
+    .btn-outline-white {
+      background: none;
+      color: #004aad;
+      border: 2px solid #004aad;
+      padding: 10px;
+      font-weight: bold;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+    }
+
+    .btn-outline-white:hover {
+      background-color: #004aad;
+      color: white;
+    }
+
+    .right-panel {
+      flex: 0.6;
+      background-color: white;
+      padding: 60px 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .right-panel h3 {
+      color: #004aad;
+      margin-bottom: 30px;
+    }
+
+    .icon-row {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .icon-box {
+      text-align: center;
+    }
+
+    .icon-box img {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 10px;
+    }
+
+    .icon-box span {
+      font-size: 14px;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .alert {
+      font-size: 14px;
+    }
+
+    .logo-footer {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 130px;
+    }
+
+    @media (max-width: 768px) {
+      .container-login {
+        flex-direction: column;
+      }
+
+      .left-panel,
+      .right-panel {
+        flex: none;
+        width: 100%;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .card-login {
+        max-width: 100%;
+      }
+    }
+  </style>
 </head>
-<body class="bg-light">
+<body>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg">
-                <div class="card-header bg-primary text-white text-center">
-                    <h3>Login no Sistema</h3>
-                </div>
-                <div class="card-body">
+<div class="container-login">
 
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-info" role="alert">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
+  <!-- Painel Azul com Card -->
+  <div class="left-panel">
+    <div class="card-login">
+      <h2>Acesso ao Sistema</h2>
 
-                    {% if form.non_field_errors %}
-                        <div class="alert alert-danger">
-                            {{ form.non_field_errors }}
-                        </div>
-                    {% endif %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-info">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
 
-                    <form method="POST">
-                        {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+      {% endif %}
 
-                        <div class="mb-3">
-                            {{ form.email.label_tag }}
-                            {{ form.email }}
-                            {% if form.email.errors %}
-                                <div class="text-danger">
-                                    {{ form.email.errors }}
-                                </div>
-                            {% endif %}
-                        </div>
+      <form method="POST">
+        {% csrf_token %}
 
-                        <div class="mb-3">
-                            {{ form.password.label_tag }}
-                            {{ form.password }}
-                            {% if form.password.errors %}
-                                <div class="text-danger">
-                                    {{ form.password.errors }}
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-success">Entrar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        <div class="input-group">
+          <img src="{% static 'images/white version/usuario.png' %}" alt="user">
+          {{ form.email }}
+          {% if form.email.errors %}
+            <div class="text-danger">{{ form.email.errors }}</div>
+          {% endif %}
         </div>
+
+        <div class="input-group">
+          <img src="{% static 'images/white version/func.png' %}" alt="password">
+          {{ form.password }}
+          {% if form.password.errors %}
+            <div class="text-danger">{{ form.password.errors }}</div>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn-outline-white">Entrar</button>
+      </form>
     </div>
+  </div>
+
+  <!-- Painel Branco com ícones -->
+  <div class="right-panel">
+    <h3>Facilite sua gestão</h3>
+    <div class="icon-row">
+      <div class="icon-box">
+        <img src="{% static 'images/white version/func.png' %}" alt="func">
+        <span>Colaboradores</span>
+      </div>
+      <div class="icon-box">
+        <img src="{% static 'images/white version/rest.png' %}" alt="rest">
+        <span>Restaurantes</span>
+      </div>
+      <div class="icon-box">
+        <img src="{% static 'images/white version/obra.png' %}" alt="obra">
+        <span>Obras</span>
+      </div>
+      <div class="icon-box">
+        <img src="{% static 'images/white version/hotel.png' %}" alt="hotel">
+        <span>Hotéis</span>
+      </div>
+    </div>
+  </div>
 </div>
+
+<img src="{% static 'images/paintocode.png' %}" alt="logo" class="logo-footer">
 
 </body>
 </html>

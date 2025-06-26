@@ -8,6 +8,7 @@
 </head>
 
 <body>
+
   <!-- Sidebar -->
   <div class="sidebar">
     <!-- Ícone do usuário -->
@@ -34,47 +35,59 @@
       INICIO
     </a>
 
+    {% if user.has_perm "Sistema.view_refeicao" %}
     <a href="{% url 'listar_pedidos' %}">
       <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       REFEIÇÕES
     </a>
+     {% endif %}
 
+    {% if user.groups.filter(name='Administradores').exists %}
     <a href="{% url 'listar-colaboradores' %}">
       <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       COLABORADORES
     </a>
+    {% endif %}
 
     <a href="{% url 'listar-restaurantes' %}">
       <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       RESTAURANTES
     </a>
 
+    {% if user.has_perm "Sistema.view_obra" %}
     <a href="{% url 'listar-obras' %}">
       <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       OBRAS
     </a>
+    {% endif %}
 
+    {% if user.groups.filter(name='Administradores').exists %}
     <a href="{% url 'listar-hoteis' %}">
       <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       HOTÉIS
     </a>
+    {% endif %}
 
 
+    {% if user.groups.filter(name='Administradores').exists %}
     <a href="{% url 'cadastrar_usuario' %}">
       <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       USUÁRIOS
     </a>
+    {% endif %}
 
+    {% if user.groups.filter(name='Administradores').exists %}
     <a href="{% url 'relatorio' %}">
       <img src="{% static 'images/white version/dash.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
       DASHBOARD
     </a>
+    {% endif %}
   </div>
 
   <!-- Conteúdo principal -->
   <img src="{% static 'images/paintocode.png' %}" alt="erro" style="position: fixed; bottom: 0; right: 0; width: 130px; height: 37px; margin-right: 5px;">
   <h style="display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 100px; color: #004aad; margin-left: 250px;">
-    SEJA BEM-VINDO
+    SEJA BEM-VINDO {{ user.username }}, {{ user.groups.all.0.name }}
   </h>
 </body>
 </html>
