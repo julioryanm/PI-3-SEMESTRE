@@ -380,14 +380,35 @@ def cadastrar_pedido(request):
 
 # Lista todas as refeicoes cadastradas Mongo 
 @login_required
-@permission_required('Sistema.view_refeicao', raise_exception=True)
 def listar_registros(request):
+    user = request.user
+
+    # Verifica se o usuário está no grupo Encarregado, Administradores ou é superuser
+    if not (user.groups.filter(name='Encarregados').exists() or
+            user.groups.filter(name='Administradores').exists() or
+            user.is_superuser):
+        return HttpResponseForbidden("Você não tem permissão para acessar esta página.")
+
     registros = pedido_model.listar_registros()
 
     paginator = Paginator(registros, 100)  # 100 registros por página
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'listar-registros.html', {'registros': page_obj, 'page_obj': page_obj})
+
+    # Para o template saber se pode excluir (apenas admins e superusers)
+    pode_excluir = user.groups.filter(name='Administradores').exists() or user.is_superuser
+
+    # Pode editar? Para você pode liberar para todos que acessam (Encarregados, Admin e superuser)
+    pode_editar = True
+
+    context = {
+        'registros': page_obj,
+        'page_obj': page_obj,
+        'pode_excluir': pode_excluir,
+        'pode_editar': pode_editar,
+    }
+
+    return render(request, 'listar-registros.html', context)
 
 @login_required
 def editar_registro(request, registro_id):
