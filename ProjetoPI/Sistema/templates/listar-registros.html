@@ -1,119 +1,89 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
-  <title>Refeições</title>
-  <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-
-</head>
-<body>
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <!-- Ícone do usuário -->
-    <div class="logout-container">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  
+    <title>Registros de Refeições</title>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Ícone do usuário -->
+       <div class="logout-container">
       <img src="{% static 'images/white version/user.png' %}" alt="error" height="65px" width="65px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
-
+  
       <!-- Botão de sair abaixo do ícone -->
-    
-      <form method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit" class="sair-btn">
-          <img src="{% static 'images/logout.png' %}" alt="error" height="15px" width="15px">
-          Sair
-        </button>
-      </form>
+  
+        <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="sair-btn">
+            <img src="{% static 'images/logout.png' %}" alt="error" height="15px" width="15px">
+            Sair
+          </button>
+        </form>
+      </div>
+  
+      <!-- Links do menu -->
+  
+      <label>Navegeção</label>
+      <hr>
+      <a href="{% url 'home' %}">
+        <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+        INICIO
+      </a>
+  
+      <a href="{% url 'listar_pedidos' %}">
+        <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+        REFEIÇÕES
+      </a>
+  
+      <a href="{% url 'listar-colaboradores' %}">
+        <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+        COLABORADORES
+      </a>
+  
+      <a href="{% url 'listar-restaurantes' %}">
+        <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+        RESTAURANTES
+      </a>
+  
+      <a href="{% url 'listar-obras' %}">
+        <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+        OBRAS
+      </a>
+  
+      <a href="{% url 'listar-hoteis' %}">
+        <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+        HOTÉIS
+      </a>
+  
+  
+      <a href="{% url 'cadastrar_usuario' %}">
+        <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+        USUÁRIOS
+      </a>
+  
+      <a href="{% url 'relatorio' %}">
+        <img src="{% static 'images/white version/dash.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+        DASHBOARD
+      </a>
     </div>
-
-    <!-- Links do menu -->
-    <label>Navegação</label>
-    <hr>
-    <a href="{% url 'home' %}">
-      <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      INICIO
-    </a>
-
-    {# Mostrar "Refeições" para Encarregados, Administradores e superusers #}
-    {% if is_encarregado or is_administrador or is_superuser %}
-    <a href="{% url 'listar_pedidos' %}">
-      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      REFEIÇÕES
-    </a>
-    {% endif %}
-
-    {% if is_administrador or is_superuser %}
-    <a href="{% url 'listar-colaboradores' %}">
-      <img src="{% static 'images/white version/func.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
-      Colaboradores
-    </a>
-
-    <a href="{% url 'listar-restaurantes' %}">
-      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      RESTAURANTES
-    </a>
-
-    <a href="{% url 'listar-obras' %}">
-      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      OBRAS
-    </a>
-
-    <a href="{% url 'listar-hoteis' %}">
-      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
-      Hotéis
-    </a>
-
-    <a href="{% url 'cadastrar_usuario' %}">
-      <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      Usuários
-    </a>
-
-    <a href="{% url 'relatorio' %}">
-      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      DASHBOARD
-    </a>
-    {% endif %}
-
-    {# Restaurantes também podem ser vistos pelos que tem permissão #}
-    {% if is_administrador or is_superuser %}
-    <a href="{% url 'listar-restaurantes' %}">
-      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      RESTAURANTES
-    </a>
-    {% endif %}
-
-    {# Obras visíveis para quem tem permissão #}
-    {% if is_encarregado or is_administrador or is_superuser %}
-    <a href="{% url 'listar-obras' %}">
-      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      OBRAS
-    </a>
-    {% endif %}
-  </div>
-
-  <!-- Conteúdo principal -->
-  <div class="corpo">
-
-   <h>
-    <img src="{% static 'images/blue version/lunch-box.png' %}" alt="Logo" height="55" width="55"
-             style="margin-right: 15px;">
-    Registros de Refeições</h>
-
-   {% if is_encarregado or is_administrador or is_superuser %}
-      <a href="{% url 'cadastrar-refeicao' %}" class="btn btn-primary" style="margin-bottom: 15px; display: inline-block;">Nova Refeição</a>
-    {% endif %}
-
-<table class="styled-table">
-  <thead>
-    <tr>
-      <th>Colaborador</th>
-      <th>Obra</th>
-      <th>Data</th>
-      <th>Valor</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
+  
+    <div class="corpo">
+     <h>Registros de Refeições</h>
+  
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Colaborador</th>
+        <th>Obra</th>
+        <th>Data</th>
+        <th>Valor</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
   <tbody>
     {% for r in registros %}
     <tr>
@@ -122,42 +92,29 @@
       <td>{{ r.data_refeicao|date:"d/m/Y" }}</td>
       <td>R$ {{ r.valor_refeicao }}</td>
       <td>
-            {# Editar para todos que tem acesso (Encarregados, Admin, Superuser) #}
-            {% if is_encarregado or is_administrador or is_superuser %}
-              <a href="{% url 'editar_registro' r.id %}">Editar</a>
-            {% endif %}
-            
-            {# Excluir só para Admins e Superusers #}
-            {% if is_administrador or is_superuser %}
-        
-              <a href="{% url 'excluir_registro' r.id %}" onclick="return confirm('Deseja excluir?');">Excluir</a>
-            {% endif %}
-          </td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="5">Nenhum registro encontrado.</td></tr>
-        {% endfor %}
-      </tbody>
-</table>
+        <a href="{% url 'editar_registro' r.id %}">Editar</a> |
+        <a href="{% url 'excluir_registro' r.id %}" onclick="return confirm('Deseja excluir?');">Excluir</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  </table>
+  
+    <div class="pagination" style="margin-top: 20px;">
+    <span>
+      {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; Primeira</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+      {% endif %}
+  
+      Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+  
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Próxima</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+      {% endif %}
+    </span>
   </div>
-
-  <div class="pagination" style="margin-top: 20px;">
-  <span>
-    {% if page_obj.has_previous %}
-      <a href="?page=1">&laquo; Primeira</a>
-      <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
-    {% endif %}
-
-    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
-
-    {% if page_obj.has_next %}
-      <a href="?page={{ page_obj.next_page_number }}">Próxima</a>
-      <a href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
-    {% endif %}
-  </span>
-</div>
-
-
-
-</body>
-</html>
+  
+  </body>
+  </html>
