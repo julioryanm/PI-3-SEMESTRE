@@ -1,8 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from Sistema.models import (
-    Obra, Colaborador, Hotel, Restaurante, RelatorioMensal, Profile
-)
+from Sistema.models import Obra, Colaborador, Hotel, Restaurante, Profile
 from datetime import date
 
 class ModelTests(TestCase):
@@ -46,35 +44,21 @@ class ModelTests(TestCase):
             responsavel="Carlos Restaurante"
         )
 
-        self.relatorio = RelatorioMensal.objects.create(
-            colaborador=self.colaborador,
-            mes_referencia="2023-02",
-            cafe_manha=10,
-            almocos=15,
-            jantares=12,
-            lanches=5,
-            valor_total=500.00
-        )
-
         self.profile = Profile.objects.create(
             user=self.user,
-            tipo="encarregado",
-            telefone="11999999999",
-            obra=self.obra
+            tipo="encarregado"
         )
 
     def test_str_methods(self):
         self.assertEqual(str(self.obra), "Obra Exemplo (Construtora XYZ)")
         self.assertEqual(str(self.colaborador), "João Silva")
-        self.assertEqual(str(self.relatorio), "Relatório de 2023-02 - João Silva")
         self.assertEqual(str(self.profile), "teste (Encarregado de Obra)")
+        self.assertEqual(str(self.hotel), "Hotel Sol")
+        self.assertEqual(str(self.restaurante), "Restaurante Bom Sabor")
 
     def test_dias_atraso(self):
         self.assertEqual(self.obra.dias_atraso, 9)
 
-    def test_total_refeicoes_calculado_automaticamente(self):
-        self.assertEqual(self.relatorio.total_refeicoes, 10 + 15 + 12 + 5)  # 42
-
-    def test_profile_vinculado(self):
+    def test_profile_usuario(self):
         self.assertEqual(self.profile.user.username, 'teste')
-        self.assertEqual(self.profile.obra.nome, 'Obra Exemplo')
+        self.assertEqual(self.profile.get_tipo_display(), 'Encarregado de Obra')

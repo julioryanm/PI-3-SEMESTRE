@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.admin.sites import site
 from Sistema.models import (
     Profile, EmpresaParceira, Obra, Colaborador,
-    Restaurante, Hotel, RelatorioMensal
+    Restaurante, Hotel
 )
 from Sistema import admin as sistema_admin
 
@@ -25,6 +25,3 @@ class AdminRegistrationTests(TestCase):
 
     def test_hotel_registered_in_admin(self):
         self.assertIn(Hotel, site._registry)
-
-    def test_relatorio_mensal_registered_in_admin(self):
-        self.assertIn(RelatorioMensal, site._registry)
