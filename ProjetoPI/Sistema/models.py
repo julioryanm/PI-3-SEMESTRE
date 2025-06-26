@@ -11,12 +11,6 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
 
-@receiver(post_save, sender=User)
-def criar_token_para_novo_usuario(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance) 
-
-
 @receiver(post_migrate)
 def permissoes_grupo(sender, **kwargs):
   permissoes_admin = Permission.objects.filter(
@@ -289,65 +283,6 @@ class Hotel(models.Model):
     )
     def __str__(self):
         return self.nome
-
-class RelatorioMensal(models.Model):
-    """Modelo para relatórios mensais de refeições com detalhamento"""
-    colaborador = models.ForeignKey(
-        Colaborador,
-        on_delete=models.CASCADE,
-        verbose_name="Colaborador",
-        related_name='relatorios'
-    )
-    mes_referencia = models.CharField(
-        max_length=7,
-        verbose_name="Mês de Referência",
-        help_text="Formato: AAAA-MM"
-    )
-    total_refeicoes = models.IntegerField(
-        verbose_name="Total de Refeições"
-    )
-    valor_total = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        verbose_name="Valor Total"
-    )
-    cafe_manha = models.IntegerField(
-        verbose_name="Cafés da Manhã",
-        default=0
-    )
-    almocos = models.IntegerField(
-        verbose_name="Almoços",
-        default=0
-    )
-    jantares = models.IntegerField(
-        verbose_name="Jantares",
-        default=0
-    )
-    lanches = models.IntegerField(
-        verbose_name="Lanches",
-        default=0
-    )
-    data_geracao = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Data de Geração"
-    )
-    observacoes = models.TextField(
-        verbose_name="Observações",
-        blank=True
-    )
-
-    class Meta:
-        verbose_name = "Relatório Mensal"
-        verbose_name_plural = "Relatórios Mensais"
-        ordering = ['-mes_referencia']
-        unique_together = ['colaborador', 'mes_referencia']
-
-    def __str__(self):
-        return f"Relatório de {self.mes_referencia} - {self.colaborador}"
-
-    def save(self, *args, **kwargs):
-        self.total_refeicoes = self.cafe_manha + self.almocos + self.jantares + self.lanches
-        super().save(*args, **kwargs)
         
 class Profile(models.Model):
     TIPOS_USUARIO = [
@@ -357,9 +292,6 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     tipo = models.CharField(max_length=20, choices=TIPOS_USUARIO)
-    telefone = models.CharField(max_length=15, blank=True, null=True)
-    obra = models.ForeignKey(Obra, on_delete=models.SET_NULL, null=True, blank=True)
-    foto = models.ImageField(upload_to='fotos_perfil/', null=True, blank=True)
     data_criacao = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
