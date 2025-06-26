@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from .models import (
     Profile, EmpresaParceira, Obra, Colaborador, 
-    Restaurante, RelatorioMensal, Hotel
+    Restaurante, Hotel
 )
 
 @admin.register(Profile)
@@ -137,38 +137,9 @@ class HotelAdmin(admin.ModelAdmin):
         }),
     )
 
-
-class RelatorioMensalAdmin(admin.ModelAdmin):
-    list_display = (
-        'colaborador', 'mes_referencia', 'total_refeicoes', 
-        'valor_total', 'data_geracao'
-    )
-    list_filter = ('mes_referencia',)
-    search_fields = ('colaborador__nome',)
-    date_hierarchy = 'data_geracao'
-    raw_id_fields = ('colaborador',)
-    readonly_fields = ('data_geracao',)
-
-    fieldsets = (
-        ('Identificação', {
-            'fields': ('colaborador', 'mes_referencia')
-        }),
-        ('Quantitativos', {
-            'fields': (
-                'cafe_manha', 'almocos', 'jantares', 'lanches',
-                'total_refeicoes', 'valor_total'
-            )
-        }),
-        ('Detalhes', {
-            'fields': ('data_geracao', 'observacoes')
-        }),
-    )
-
-
 # Registro dos modelos no admin
 admin.site.register(EmpresaParceira, EmpresaParceiraAdmin)
 admin.site.register(Obra, ObraAdmin)
 admin.site.register(Colaborador, ColaboradorAdmin)
 admin.site.register(Restaurante, RestauranteAdmin)
 admin.site.register(Hotel, HotelAdmin)
-admin.site.register(RelatorioMensal, RelatorioMensalAdmin)
