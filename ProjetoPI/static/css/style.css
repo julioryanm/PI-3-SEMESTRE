@@ -195,3 +195,20 @@ body {
             display: flex;
             justify-content: right;
         }
+
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination a {
+            padding: 8px 12px;
+            margin: 0 4px;
+            background: #eee;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .pagination span {
+            font-weight: bold;
+        }
