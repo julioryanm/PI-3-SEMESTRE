@@ -109,16 +109,9 @@ class CustomUserCreationForm(UserCreationForm):
         label="Telefone"
     )
 
-    admin_password = forms.CharField(
-        required=False,
-        label="Senha de Administrador (fornecida pelo RH)",
-        widget=forms.PasswordInput(attrs={'style': 'display: none;'}),
-        help_text="Obrigatório apenas para cadastro de administradores"
-    )
-
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', 'tipo', 'telefone', 'admin_password')
+        fields = ('username', 'email', 'password1', 'password2', 'tipo', 'telefone')
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
