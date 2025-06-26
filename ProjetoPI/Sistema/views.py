@@ -265,10 +265,6 @@ def cadastrar_usuario(request):
             messages.error(request, 'Nome de usuário já está em uso!')
             return redirect('cadastrar_usuario')
 
-        if tipo == 'admin' and admin_password != "Senha123":
-            messages.error(request, 'Senha de administrador incorreta!')
-            return redirect('cadastrar_usuario')
-
         try:
             grupo_admin, _ = Group.objects.get_or_create(name='Administradores')
             grupo_encarregado, _ = Group.objects.get_or_create(name='Encarregados')
