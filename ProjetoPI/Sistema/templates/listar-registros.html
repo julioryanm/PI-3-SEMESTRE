@@ -4,8 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<<<<<<< main
+
+  <title>Registros de Refeições</title>
+=======
   <title>Refeições</title>
   <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+>>>>>>> main
 </head>
 <body>
   <!-- Sidebar -->
@@ -86,6 +91,22 @@
       <th>Ações</th>
     </tr>
   </thead>
+<<<<<<< main
+<tbody>
+  {% for r in registros %}
+  <tr>
+    <td>{{ r.colaborador_nome }}</td>
+    <td>{{ r.obra_nome }}</td>
+    <td>{{ r.data_refeicao|date:"d/m/Y" }}</td>
+    <td>R$ {{ r.valor_refeicao }}</td>
+    <td>
+      <a href="{% url 'editar_registro' r.id %}">Editar</a> |
+      <a href="{% url 'excluir_registro' r.id %}" onclick="return confirm('Deseja excluir?');">Excluir</a>
+    </td>
+  </tr>
+  {% endfor %}
+</tbody>
+=======
   <tbody>
     {% for r in registros %}
     <tr>
@@ -106,8 +127,26 @@
     </tr>
     {% endfor %}
   </tbody>
+>>>>>>> main
 </table>
 </div>
+
+  <div class="pagination" style="margin-top: 20px;">
+  <span>
+    {% if page_obj.has_previous %}
+      <a href="?page=1">&laquo; Primeira</a>
+      <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+    {% endif %}
+
+    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}">Próxima</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+    {% endif %}
+  </span>
+</div>
+
 
 
 </body>
