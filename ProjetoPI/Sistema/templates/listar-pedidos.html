@@ -4,14 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <title>Controle de Refeição Diária</title>
+  <title>Cadastrar Refeição</title>
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
 </head>
 <body>
   <!-- Sidebar -->
   <div class="sidebar">
     <!-- Ícone do usuário -->
      <div class="logout-container">
-    <img src="{% static 'images/white version/user.png' %}" alt="error" height="65px" width="65px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+    <img src="{% static 'images/white version/user.png' %}" alt="error" height="75px" width="75px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
 
     <!-- Botão de sair abaixo do ícone -->
     
@@ -28,65 +29,63 @@
 
     <label>Navegeção</label>
     <hr>
-    <a href="{% url 'home' %}">
-      <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      INICIO
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Dashboard
     </a>
 
-    <a href="{% url 'listar_pedidos' %}">
-      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      REFEIÇÕES
+     <a href="{% url 'listar_registros' %}" class="active">
+      <img src="{% static 'images/white version/alim.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Refeições
     </a>
 
     <a href="{% url 'listar-colaboradores' %}">
-      <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      COLABORADORES
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Colaboradores
     </a>
 
     <a href="{% url 'listar-restaurantes' %}">
-      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      RESTAURANTES
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Restaurantes
     </a>
 
     <a href="{% url 'listar-obras' %}">
-      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      OBRAS
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Obras
     </a>
 
     <a href="{% url 'listar-hoteis' %}">
-      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      HOTÉIS
+      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Hotéis
     </a>
 
 
     <a href="{% url 'cadastrar_usuario' %}">
       <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      USUÁRIOS
+      Usuários
     </a>
 
-    <a href="{% url 'relatorio' %}">
-      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-      DASHBOARD
-    </a>
+    
   </div>
 
   <div class="corpo">
-    <div class="page-header">
-      <h>Controle Diário de Alimentação</h>
-    </div>
+      <h>
+        <img src="{% static 'images/blue version/lunch-plus.png' %}" alt="Logo" height="55px" width="70px"
+             style="margin-right: 15px;">
+        Cadastrar Refeição</h>
+    
 
     <div class="right-buttons">
-          <a href="{% url 'listar_registros' %}" class="blue-button">
-            <img src="{% static 'images/white version/plus.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
-            Registros</a>
+
+            <button type="button" onclick="confirmarRegistro()">
+              <img src="{% static 'images/white version/check.png' %}" alt="error" height="17px" width="17px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
+              Registrar</button>
+
+        <input style="width: 130px;margin-right: 5px; margin-left: 15px;margin-top: -10px;margin-bottom: 15px;border-color:#004aad ;" type="date" id="data" name="data" required min="2025-01-01">
     </div>
     
     <form method="POST" action="{% url 'cadastrar_pedido' %}">
       {% csrf_token %}
-      <div>
-        <label for="data">Data de Registro:</label>
-        <input type="date" id="data" name="data" required min="2025-01-01">
-      </div>
 
       <div class="table-container">
         <table class="styled-table">
@@ -115,10 +114,6 @@
         </table>
       </div>
 
-      <div class="right-buttons">
-        <button type="button" onclick="confirmarRegistro()" class="btn btn-primary">Registrar</button>
-
-      </div>
     </form>
   </div>
   <div id="confirmModal" style="display:none; position:fixed; top:20%; left:30%; background:white; padding:30px; border:1px solid #333; z-index:1000; box-shadow: 0px 0px 10px black;">
