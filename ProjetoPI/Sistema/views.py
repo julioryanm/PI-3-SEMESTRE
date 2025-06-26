@@ -382,34 +382,26 @@ def cadastrar_pedido(request):
 @login_required
 def listar_registros(request):
     user = request.user
-
-    # Verifica se o usuário está no grupo Encarregado, Administradores ou é superuser
-    if not (user.groups.filter(name='Encarregados').exists() or
-            user.groups.filter(name='Administradores').exists() or
-            user.is_superuser):
-        return HttpResponseForbidden("Você não tem permissão para acessar esta página.")
+    is_encarregado = user.groups.filter(name='Encarregados').exists()
+    is_administrador = user.groups.filter(name='Administradores').exists()
+    is_superuser = user.is_superuser
 
     registros = pedido_model.listar_registros()
-
-    paginator = Paginator(registros, 100)  # 100 registros por página
+    paginator = Paginator(registros, 100)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
-    # Para o template saber se pode excluir (apenas admins e superusers)
-    pode_excluir = user.groups.filter(name='Administradores').exists() or user.is_superuser
-
-    # Pode editar? Para você pode liberar para todos que acessam (Encarregados, Admin e superuser)
-    pode_editar = True
 
     context = {
         'registros': page_obj,
         'page_obj': page_obj,
-        'pode_excluir': pode_excluir,
-        'pode_editar': pode_editar,
+        'is_encarregado': is_encarregado,
+        'is_administrador': is_administrador,
+        'is_superuser': is_superuser,
     }
 
     return render(request, 'listar-registros.html', context)
 
+    
 @login_required
 def editar_registro(request, registro_id):
     registro = pedido_model.buscar_registro(registro_id)
