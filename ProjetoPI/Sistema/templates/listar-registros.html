@@ -10,69 +10,71 @@
   <body>
     <!-- Sidebar -->
     <div class="sidebar">
-      <!-- Ícone do usuário -->
-       <div class="logout-container">
-      <img src="{% static 'images/white version/user.png' %}" alt="error" height="65px" width="65px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
-  
-      <!-- Botão de sair abaixo do ícone -->
-  
-        <form method="POST" action="{% url 'logout' %}">
-          {% csrf_token %}
-          <button type="submit" class="sair-btn">
-            <img src="{% static 'images/logout.png' %}" alt="error" height="15px" width="15px">
-            Sair
-          </button>
-        </form>
-      </div>
-  
-      <!-- Links do menu -->
-  
-      <label>Navegeção</label>
-      <hr>
-      <a href="{% url 'home' %}">
-        <img src="{% static 'images/white version/inicio.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-        INICIO
-      </a>
-  
-      <a href="{% url 'listar_pedidos' %}">
-        <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-        REFEIÇÕES
-      </a>
-  
-      <a href="{% url 'listar-colaboradores' %}">
-        <img src="{% static 'images/white version/func.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-        COLABORADORES
-      </a>
-  
-      <a href="{% url 'listar-restaurantes' %}">
-        <img src="{% static 'images/white version/rest.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-        RESTAURANTES
-      </a>
-  
-      <a href="{% url 'listar-obras' %}">
-        <img src="{% static 'images/white version/obra.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-        OBRAS
-      </a>
-  
-      <a href="{% url 'listar-hoteis' %}">
-        <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-        HOTÉIS
-      </a>
-  
-  
-      <a href="{% url 'cadastrar_usuario' %}">
-        <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-        USUÁRIOS
-      </a>
-  
-      <a href="{% url 'relatorio' %}">
-        <img src="{% static 'images/white version/dash.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
-        DASHBOARD
-      </a>
+    <!-- Ícone do usuário -->
+     <div class="logout-container">
+    <img src="{% static 'images/white version/user.png' %}" alt="error" height="75px" width="75px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
+<div style="font-size: 30px; color:white; margin-top: -30px;margin-bottom: 10px;">
+    {{ username_maiusculo }}
+</div>
+    <!-- Botão de sair abaixo do ícone -->
+    
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="sair-btn">
+          <img src="{% static 'images/logout.png' %}" alt="error" height="15px" width="15px">
+          Sair
+        </button>
+      </form>
     </div>
+
+    <!-- Links do menu -->
+
+    <label>Navegeção</label>
+    <hr>
+    <a href="{% url 'relatorio' %}">
+      <img src="{% static 'images/white version/dash.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Dashboard
+    </a>
+
+     <a href="{% url 'listar_registros' %}" class="active">
+      <img src="{% static 'images/white version/alim.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Refeições
+    </a>
+
+    <a href="{% url 'listar-colaboradores' %}">
+      <img src="{% static 'images/white version/func.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Colaboradores
+    </a>
+
+    <a href="{% url 'listar-restaurantes' %}">
+      <img src="{% static 'images/white version/rest.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Restaurantes
+    </a>
+
+    <a href="{% url 'listar-obras' %}">
+      <img src="{% static 'images/white version/obra.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Obras
+    </a>
+
+    <a href="{% url 'listar-hoteis' %}">
+      <img src="{% static 'images/white version/hotel.png' %}" alt="error" height="25px" width="25px" style="margin-right: 10px;margin-left: 10px;">
+      Hotéis
+    </a>
+
+
+    <a href="{% url 'cadastrar_usuario' %}">
+      <img src="{% static 'images/white version/usuario.png' %}" alt="error" height="20px" width="20px" style="margin-right: 10px;margin-left: 10px;">
+      Usuários
+    </a>
+
+    
+  </div>
   
     <div class="corpo">
-     <h>Registros de Refeições</h>
+     <h>
+    <img src="{% static 'images/blue version/lunch-box.png' %}" alt="Logo" height="55" width="55"
+             style="margin-right: 15px;">
+    Registros de Refeições</h>
   
   <table class="styled-table">
     <thead>
@@ -91,9 +93,15 @@
       <td>{{ r.obra_nome }}</td>
       <td>{{ r.data_refeicao|date:"d/m/Y" }}</td>
       <td>R$ {{ r.valor_refeicao }}</td>
-      <td>
-        <a href="{% url 'editar_registro' r.id %}">Editar</a> |
-        <a href="{% url 'excluir_registro' r.id %}" onclick="return confirm('Deseja excluir?');">Excluir</a>
+      <td style="display: flex;margin-bottom: -20px;">
+        <div style="margin-top: 8px;display: flex;">
+        <a href="{% url 'editar_registro' r.id %}" class="blue-button">
+          <img src="{% static 'images/white version/pencil.png' %}" alt="Editar" height="15px" width="15px">
+        </a>
+        <a href="{% url 'excluir_registro' r.id %}" onclick="return confirm('Deseja excluir?');" class="blue-button">
+          <img src="{% static 'images/white version/trash.png' %}" alt="Editar" height="15px" width="15px">
+        </a>
+        </div>
       </td>
     </tr>
     {% endfor %}

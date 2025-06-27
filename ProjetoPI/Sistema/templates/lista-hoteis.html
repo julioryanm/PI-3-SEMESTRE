@@ -17,7 +17,9 @@
     <!-- Ícone do usuário -->
      <div class="logout-container">
     <img src="{% static 'images/white version/user.png' %}" alt="error" height="75px" width="75px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
-
+<div style="font-size: 30px; color:white; margin-top: -30px;margin-bottom: 10px;">
+    {{ username_maiusculo }}
+</div>
     <!-- Botão de sair abaixo do ícone -->
     
       <form method="POST" action="{% url 'logout' %}">
@@ -88,10 +90,6 @@
               <img src="{% static 'images/white version/plus.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
         Adicionar
         </a>
-
-        <button type="submit" onclick="return confirm('Tem certeza que deseja deletar os itens selecionados?')">
-          <img src="{% static 'images/white version/trash.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
-          Excluir
     </div>
 
     <input type="hidden" name="model" value="Hotel">
