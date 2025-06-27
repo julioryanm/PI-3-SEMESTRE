@@ -13,7 +13,9 @@
     <!-- Ícone do usuário -->
      <div class="logout-container">
     <img src="{% static 'images/white version/user.png' %}" alt="error" height="75px" width="75px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
-
+<div style="font-size: 30px; color:white; margin-top: -30px;margin-bottom: 10px;">
+    {{ username_maiusculo }}
+</div>
     <!-- Botão de sair abaixo do ícone -->
     
       <form method="POST" action="{% url 'logout' %}">
@@ -70,6 +72,9 @@
 
   <div class="corpo">
       <h>
+        <a href="{% url 'listar-obras' %}">
+            <img src="{% static 'images/blue version/back.png' %}"alt="Logo" height="20" width="20" style="margin-right: 35px;">
+        </a>
         <img src="{% static 'images/blue version/lunch-plus.png' %}" alt="Logo" height="55px" width="70px"
              style="margin-right: 15px;">
         Cadastrar Refeição</h>
@@ -82,7 +87,7 @@
               Registrar</button>
 
               <a href="{% url 'listar_registros' %}" class="blue-button">
-                <img src="{% static 'images/white version/plus.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
+                <img src="{% static 'images/white version/overview.png' %}" alt="error" height="15px" width="15px" style="margin-right: 5px; margin-left: 5px; margin-top: auto; margin-bottom: auto;">
                 Registros</a>
 
         <input style="width: 130px;margin-right: 5px; margin-left: 15px;margin-top: -10px;margin-bottom: 15px;border-color:#004aad ;" type="date" id="data" name="data" required min="2025-01-01">

@@ -14,7 +14,9 @@
     <!-- Ícone do usuário -->
      <div class="logout-container">
     <img src="{% static 'images/white version/user.png' %}" alt="error" height="75px" width="75px" style="display: flex; margin:auto; margin-bottom: 55px; margin-top: 90px;">
-
+<div style="font-size: 30px; color:white; margin-top: -30px;margin-bottom: 10px;">
+    {{ username_maiusculo }}
+</div>
     <!-- Botão de sair abaixo do ícone -->
     
       <form method="POST" action="{% url 'logout' %}">
